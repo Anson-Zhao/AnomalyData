@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CitySmart WorldWise - Successful Request</title>
+    <title>TimeLog - Successful Request</title>
     <script src="../3rdPartyLibs/jquery-3.3.1.min.js"></script>
 </head>
 <body ononline="onFunction()" onoffline="offFunction()">
@@ -12,9 +12,9 @@
 </div>
 <script>
     $(document).ready(function(){
-        $(function() {
+        $(function () {
             let timeleft = 3;
-            let downloadTimer = setInterval(function() {
+            let downloadTimer = setInterval(function () {
                 timeleft--;
                 document.getElementById("countdowntimer").textContent = timeleft;
                 if (timeleft <= 0) {
@@ -26,11 +26,11 @@
     });
 
     function onFunction() {
-        alert("You are now online.");
+        alert ("You are now online.");
     }
 
     function offFunction() {
-        alert("Your are offline. Some functionality may be unavailable.");
+        alert ("Your are offline. Some functionality may be unavailable.");
     }
 
 </script>

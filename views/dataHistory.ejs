@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CitySmart WorldWise - Approved Layer Requests</title>
+    <title>Timelog - History</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -10,8 +10,8 @@
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <!--<link rel="stylesheet" href="//unpkg.com/flatpickr/dist/flatpickr.min.css">-->
-    <link rel="stylesheet" href="../css/Title.css" type="text/css">
-    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBX94wEDdQ52lCDhKAhcfR-flIw1NyLTMA"></script>
+<!--    <link rel="stylesheet" href="../css/Title.css" type="text/css">-->
+<!--    <script src="//maps.googleapis.com/maps/api/js?key=AIzaSyBX94wEDdQ52lCDhKAhcfR-flIw1NyLTMA"></script>-->
     <script src="../3rdPartyLibs/jquery-3.3.1.min.js"></script>
     <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="//cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
@@ -174,9 +174,9 @@
     <a class="navul" style="background:#000000;" href="http://aworldbridge.com">
         <img class="banner" src="/images/NewWBBanner.jpg" style="width:510px;height:76px;"/>
     </a>
-    <a href="/homepageLI" style="width:110px;">
-        <button class="navbutton1"> Homepage </button>
-    </a>
+<!--    <a href="/homepageLI" style="width:110px;">-->
+<!--        <button class="navbutton1"> Homepage </button>-->
+<!--    </a>-->
     <a href="/userHome" style="width:110px;">
         <button class="navbutton1" style="width: 160px"> User Home </button>
     </a>
@@ -206,50 +206,50 @@
 <body ononline="onFunction()" onoffline="offFunction()">
 <div class="container">
     <div class="page-header text-center">
-        <h1><span class="fa fa-check-square-o"></span><strong> CitySmart WorldWise - Approved Layers </strong></h1>
+        <h1><span class="fa fa-check-square-o"></span><strong> Time Log - Log History </strong></h1>
         <h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4>
     </div>
 </div>
 <br>
     <div class="container" style="width: 900px;">
-        <div class="center floating-Box clearForm" style="width: 490px;">
-            <h4 class="floating-Box" style="width: 220px;"><strong>Date Range:&nbsp;</strong></h4>
-            <div style="width: 350px;">
+        <div class="center floating-Box clearForm" style="width: 900px;">
+            <h4 class="floating-Box" style="width: 520px;"><strong>Search Date Range:&nbsp</strong></h4>
+            <div style="width: 950px;">
                 <h5 class="floating-Box" style="width: 50px;">From:&nbsp;</h5>&nbsp;
-                <input class="date floating-Box" type="text" placeholder="Select Date" style="width: 280px;
+                <input class="date floating-Box" id="from" type="text" placeholder="Select Date" style="width: 280px;
     height: 40px;
     padding-left: 10px;
     margin: 5px 5px 5px 0px;
     border-radius: 5px;
-    border: 1px solid #c8c8c8;">
-                <h5 class="floating-Box" style="width: 50px;">To:&nbsp;</h5>&nbsp;
-                <input class="date floating-Box" type="text" placeholder="Select Date" style="width: 280px;
+    border: 1px solid #c8c8c8;" onchange="showFilter()">
+                <h5 class="floating-Box" style="width: 50px;">   To:&nbsp;</h5>&nbsp;
+                <input class="date floating-Box" id="to" type="text" placeholder="Select Date" style="width: 280px;
     height: 40px;
     padding-left: 10px;
     margin: 5px 5px 5px 0px;
     border-radius: 5px;
-    border: 1px solid #c8c8c8;">
+    border: 1px solid #c8c8c8;" onchange="showFilter()">
             </div>
         </div>
-        <div class="floating-Box clearForm" style="width: 350px;">
-            <h4 class="floatingBox" style="width: 220px;"><strong>User Name:&nbsp;</strong></h4>
+        <div class="floating-Box clearForm" id="adminSearch" style="width: 350px; display: none;">
+            <h4 class="floatingBox" style="width: 220px;"><strong>Search User Name:&nbsp;</strong></h4>
             <div class="name" style="width: 375px;">
                 <h5 class="floating-Box">First Name:</h5>
-                <input class="floating-Box" id="firstName" type="text" name="first name" style="background: WhiteSmoke;
+                <input class="floating-Box" id="firstName" type="text" name="username" style="background: WhiteSmoke;
     width: 275px;
     height: 40px;
     padding-left: 10px;
-    margin: 5px 0px;
+    margin: 4px 0px;
     border-radius: 5px;
-    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">
-                <h5 class="floating-Box">Last Name:</h5>
-                <input class="floating-Box" id="lastName" type="text" name="first name" style="background: WhiteSmoke;
-    width: 275px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">
+    border: 1px solid #c8c8c8;" value="" onchange="showFilter()" >
+<!--                <h5 class="floating-Box">Last Name:</h5>-->
+<!--                <input class="floating-Box" id="lastName" type="text" name="first name" style="background: WhiteSmoke;-->
+<!--    width: 275px;-->
+<!--    height: 40px;-->
+<!--    padding-left: 10px;-->
+<!--    margin: 5px 0px;-->
+<!--    border-radius: 5px;-->
+<!--    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">-->
             </div>
         </div>
 <!--        <div class="center clearForm" style="width: 900px;">-->
@@ -339,10 +339,12 @@
     padding: 0px;
     height: 40px;">
             <button id="submitButton" class="button1" type="button" onclick="query(), showAll()" hidden disabled>Filter</button>
-            <button id="deleteButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
-    width: 110px; float: left; margin-right: 5px;">Disapprove</button>
+            <button id="filterDate" class="btn btn-primary btn-sm button" type="button" onclick="queryDate()" style="height: 40px;
+                width: 110px; float: left; margin-right: 5px;">Filter By Date</button>
             <button id="showButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
-    width: 110px; float: left" onclick="donTShowAll(), donTShowFilter()" disabled hidden>Show All</button>
+    width: 110px; float: left; margin-right: 5px;">Refresh Table</button>
+            <button id="showAll" class="btn btn-primary btn-sm button" type="button" onclick="queryAllDisplay()" style="height: 40px;
+                width: 110px; margin-right: 5px;" hidden disabled>Show Everyone</button>
         </div>
     <br>
     <div class="center">
@@ -359,23 +361,7 @@
                     <th>Out Time</th>
                     <th>Minutes Left</th>
                     <th>Time Difference</th>
-<!--                    <th>Date</th>-->
-<!--                    <th>UID</th>-->
-<!--                    <th>RID</th>-->
-<!--                    <th>Layer Type</th>-->
-<!--                    <th>Layer Continent</th>-->
-<!--                    <th>Layer Country</th>-->
-<!--                    <th>Layer State</th>-->
-<!--                    <th>Layer City</th>-->
-<!--                    <th>Main Category</th>-->
-<!--                    <th>Other Main Category</th>-->
-<!--                    <th>Sub Category</th>-->
-<!--                    <th>Other Sub Category</th>-->
-<!--                    <th>Layer Display Name</th>-->
-<!--                    <th>Layer Description</th>-->
-<!--                    <th>Layer Format</th>-->
-<!--                    <th>Layer Uploader Name</th>-->
-<!--                    <th>Status</th>-->
+                    <th>Method</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -388,23 +374,7 @@
                     <th>Out Time</th>
                     <th>Minutes Left</th>
                     <th>Time Difference</th>
-<!--                    <th>Date</th>-->
-<!--                    <th>UID</th>-->
-<!--                    <th>RID</th>-->
-<!--                    <th>Layer Type</th>-->
-<!--                    <th>Layer Continent</th>-->
-<!--                    <th>Layer Country</th>-->
-<!--                    <th>Layer State</th>-->
-<!--                    <th>Layer City</th>-->
-<!--                    <th>Main Category</th>-->
-<!--                    <th>Other Main Category</th>-->
-<!--                    <th>Sub Category</th>-->
-<!--                    <th>Other Sub Category</th>-->
-<!--                    <th>Layer Display Name</th>-->
-<!--                    <th>Layer Description</th>-->
-<!--                    <th>Layer Format</th>-->
-<!--                    <th>Layer Uploader Name</th>-->
-<!--                    <th>Status</th>-->
+                    <th>Method</th>
                 </tr>
                 </tfoot>
             </table>
@@ -432,7 +402,8 @@
             table.draw();
             // trapTable.clear();
             // trapTable.draw();
-            queryAndDisplay();
+            //queryAndDisplay();
+            showStuff();
             //"statusDel=" + "Active"
 
             flatpickr(".date", {
@@ -442,19 +413,40 @@
 
             if (UserRole === "Regular") {
                 document.getElementById("deleteButton").style.display = "none";
+                document.getElementById("admin-edit").style.display = "none";
+                document.getElementById("admin-name-search").style.display = "none";
+                document.getElementById("usernameLog").style.display = "none";
+                document.getElementById("admin-time-change").style.display = "none";
+                document.getElementById("hours").style.display = "none";
+                document.getElementById("minutes").style.display = "none";
+            }
+
+            if (UserRole !== "Regular") {
+                //document.getElementById('searchname').style.display = "none"; //disables username search for regular members
+                //queryStr = "Current_Status=Pending&UID=" + username;
+                //document.getElementById("adminSearch").style.display = 'initial';
+                //document.getElementById("admin-edit").style.display = "initial";
+                //document.getElementById("admin-name-search").style.display = "initial";
+                //document.getElementById("usernameLog").style.display = "initial";
+                //document.getElementById("admin-time-change").style.display = "block";
+                //document.getElementById("hours").style.display = "block";
+                //document.getElementById("minutes").style.display = "block";
+                document.getElementById("showAll").disabled = false;
+                document.getElementById("showAll").hidden = false;
             }
         });
 
-        $('#dataDisplay tbody').on('click', 'tr', function() {
+        $('#dataDisplay tbody').on('click', 'tr', function () {
             thArray = [];
             transactionID = [];
 
             $(this).toggleClass('selected');    //toggle class for the rows selected
             $(this).toggleClass('change');    //toggle class change color
+            // changeColor();
 
             rowSelected = table.rows('.selected').data();    //Store all the data for selected rows'
 
-            $('#dataDisplay > thead > tr > th').each(function() {
+            $('#dataDisplay > thead > tr > th').each(function () {
                 thArray.push($(this).text())
             })
             // console.log(rowSelected);
@@ -463,18 +455,18 @@
                 transactionID.push(rowSelected[i][2]);
                 transactionpicturename.push(rowSelected[i][15]);
                 LayerNameStr.push(rowSelected[i][12]);
-                console.log(transactionpicturename)
+                //console.log(transactionpicturename)
             }
         });
 
 
-        $("#deleteButton").on("click", function() {
+        $("#deleteButton").on("click", function () {
             if (confirm("Are you sure you would like to reject this row(s)?") === true) {
                 let transactionIDStr = "transactionIDStr=" + transactionID.toString();
                 let pictureStr = "pictureStr=" + transactionpicturename.toString();
                 let LayerName = "LayerName=" + LayerNameStr.toString();
 
-                console.log(pictureStr);
+                //console.log(pictureStr);
                 $.ajax({
                     url: '/disapprove',
                     type: 'GET',
@@ -488,10 +480,21 @@
             } else { return false;}
         });
 
-        $("#showButton").on("click", function() {
+        $("#showButton").on("click", function () {
             table.clear();
             table.draw();
-            queryAndDisplay();
+            //queryAndDisplay();
+            showStuff();
+            $(".clearForm input[type='text']").val('');
+            $(".filter").val('');
+            $(".date").val('');
+        });
+
+        $("#showAll").on("click", function () {
+            table.clear();
+            table.draw();
+            //queryAndDisplay();
+            queryAllDisplay();
             $(".clearForm input[type='text']").val('');
             $(".filter").val('');
             $(".date").val('');
@@ -519,7 +522,7 @@
 
     function query() {
         let firstName = document.getElementById("firstName").value;
-        let lastName = document.getElementById("lastName").value;
+        //let lastName = document.getElementById("lastName").value;
         let startDate = document.getElementsByClassName("date")[0].value;
         let endDate = document.getElementsByClassName("date")[1].value;
         //let filter1 = document.getElementsByClassName("filter")[0].value;
@@ -529,13 +532,46 @@
         //let content2 = document.getElementsByClassName("content")[1].value;
         //let content3 = document.getElementsByClassName("content")[2].value;
 
-        let queryStr = "&firstName=" + firstName + "&lastName=" + lastName + "&startDate=" + startDate + "&endDate=" + endDate + "&filter1="; //+ filter1 + "&filter2=" + filter2 + "&filter3=" + filter3 + "&content1=" + content1 + "&content2=" + content2 + "&content3=" + content3;
+        let queryStr = "&firstName=" + firstName + "&startDate=" + startDate + "&endDate=" + endDate + "&filter1="; //+ filter1 + "&filter2=" + filter2 + "&filter3=" + filter3 + "&content1=" + content1 + "&content2=" + content2 + "&content3=" + content3;
 
         table.clear();
         table.draw();
         // trapTable.clear();
         // trapTable.draw();
-        queryAndDisplay(queryStr);
+        if(firstName === '' || startDate === '' || endDate === ''){
+            alert("please fill out the required fields")
+        } else {
+            queryAndDisplay(queryStr);
+        }
+    }
+
+    function showTime(){
+        if(document.getElementById("usernameLog").value === '' || document.getElementById("hours").value === '' || document.getElementById('minutes').value === '') {
+            donTShowTime();
+        } else {
+            document.getElementById("setTime").disabled = false;
+            document.getElementById("setTime").hidden = false;
+        }
+    }
+
+    function queryDate(){
+        let startDate = document.getElementsByClassName("date")[0].value;
+        let endDate = document.getElementsByClassName("date")[1].value;
+        let queryStr1 = "&startDate=" + startDate + "&endDate=" + endDate;
+
+        table.clear();
+        table.draw();
+        if(startDate === '' || endDate === ''){
+            alert("Please fill in the Date categories in order to filter by date (it's in the name dummie)")
+        }else {
+            queryDateAndDisplay(queryStr1);
+        }
+    }
+
+    function queryAll(){
+        table.clear();
+        table.draw();
+        queryAllDisplay();
     }
 
     let queryAndDisplay = function (querystr) {
@@ -547,7 +583,7 @@
             data: querystr,
             success: function (resp) {
                 if (!resp[0].errMsg) {
-                    console.log(resp);
+                    //console.log(resp);
                     for (let i = 0; i < resp.length; i++) {
                         //if (resp[i].username === req.user.username) {
                             // if (resp[i].ContinentName = 'SA') {
@@ -567,7 +603,6 @@
                             // } else {
                             //     layer0continent = resp[i].ContinentName;
                             // }
-                                //layer0continent
                             // table.row.add([
                             //     resp[i].Date,
                             //     resp[i].UID,
@@ -594,6 +629,7 @@
                                 resp[i].outTime,
                                 resp[i].timeLeft,
                                 resp[i].timeDiff,
+                                resp[i].method,
                                 // resp[i].StateName,
                                 // resp[i].CityName,
                                 // resp[i].FirstLayer,
@@ -606,6 +642,163 @@
                                 // resp[i].Layer_Uploader_name,
                                 // resp[i].Current_Status
                             ]).draw(false);
+                        //}
+                    }
+                } else {
+                    alert(resp[0].errMsg);
+                }
+            }
+        });
+    }
+
+
+    let queryDateAndDisplay = function (querystr1) {
+        $.ajax({
+            url: '/dateStuff',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            data: querystr1,
+            success: function (resp) {
+                if (resp.length > 0) {
+                    //console.log(resp);
+                    for (let i = 0; i < resp.length; i++) {
+                        //if (resp[i].username === req.user.username) {
+                        // if (resp[i].ContinentName = 'SA') {
+                        //     layer0continent = "South America";
+                        // } else if (resp[i].ContinentName = 'NA') {
+                        //     layer0continent = "North America";
+                        // } else if (resp[i].ContinentName = 'OC') {
+                        //     layer0continent = "Oceania";
+                        // } else if (resp[i].ContinentName = 'AF') {
+                        //     layer0continent = "Africa";
+                        // } else if (resp[i].ContinentName = 'AS') {
+                        //     layer0continent = "Asia";
+                        // } else if (resp[i].ContinentName = 'EU') {
+                        //     layer0continent = "Europe";
+                        // } else if (resp[i].ContinentName = 'AN') {
+                        //     layer0continent = "Antarctica";
+                        // } else {
+                        //     layer0continent = resp[i].ContinentName;
+                        // }
+                        //layer0continent
+                        // table.row.add([
+                        //     resp[i].Date,
+                        //     resp[i].UID,
+                        //     resp[i].RID,
+                        //     resp[i].LayerCategory,
+                        //     layer0continent,
+                        //     resp[i].CountryName,
+                        //     resp[i].StateName,
+                        //     resp[i].CityName,
+                        //     resp[i].FirstLayer,
+                        //     resp[i].FirstOther,
+                        //     resp[i].SecondLayer,
+                        //     resp[i].SecondOther,
+                        //     resp[i].ThirdLayer,
+                        //     resp[i].Layer_Description,
+                        //     resp[i].LayerFormat,
+                        //     resp[i].Layer_Uploader_name,
+                        //     resp[i].Current_Status
+                        // ]).draw(false);
+                        table.row.add([
+                            resp[i].username,
+                            resp[i].logDate,
+                            resp[i].inTime,
+                            resp[i].outTime,
+                            resp[i].timeLeft,
+                            resp[i].timeDiff,
+                            resp[i].method,
+                            // resp[i].StateName,
+                            // resp[i].CityName,
+                            // resp[i].FirstLayer,
+                            // resp[i].FirstOther,
+                            // resp[i].SecondLayer,
+                            // resp[i].SecondOther,
+                            // resp[i].ThirdLayer,
+                            // resp[i].Layer_Description,
+                            // resp[i].LayerFormat,
+                            // resp[i].Layer_Uploader_name,
+                            // resp[i].Current_Status
+                        ]).draw(false);
+                        //}
+                    }
+                } else {
+                    alert("There are no logs for this time period");
+                }
+            }
+        });
+    }
+
+    let queryAllDisplay = function (querystr) {
+        $.ajax({
+            url: '/filterAllQuery',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            data: querystr,
+            success: function (resp) {
+                if (!resp[0].errMsg) {
+                    //console.log(resp);
+                    for (let i = 0; i < resp.length; i++) {
+                        //if (resp[i].username === req.user.username) {
+                        // if (resp[i].ContinentName = 'SA') {
+                        //     layer0continent = "South America";
+                        // } else if (resp[i].ContinentName = 'NA') {
+                        //     layer0continent = "North America";
+                        // } else if (resp[i].ContinentName = 'OC') {
+                        //     layer0continent = "Oceania";
+                        // } else if (resp[i].ContinentName = 'AF') {
+                        //     layer0continent = "Africa";
+                        // } else if (resp[i].ContinentName = 'AS') {
+                        //     layer0continent = "Asia";
+                        // } else if (resp[i].ContinentName = 'EU') {
+                        //     layer0continent = "Europe";
+                        // } else if (resp[i].ContinentName = 'AN') {
+                        //     layer0continent = "Antarctica";
+                        // } else {
+                        //     layer0continent = resp[i].ContinentName;
+                        // }
+                        //layer0continent
+                        // table.row.add([
+                        //     resp[i].Date,
+                        //     resp[i].UID,
+                        //     resp[i].RID,
+                        //     resp[i].LayerCategory,
+                        //     layer0continent,
+                        //     resp[i].CountryName,
+                        //     resp[i].StateName,
+                        //     resp[i].CityName,
+                        //     resp[i].FirstLayer,
+                        //     resp[i].FirstOther,
+                        //     resp[i].SecondLayer,
+                        //     resp[i].SecondOther,
+                        //     resp[i].ThirdLayer,
+                        //     resp[i].Layer_Description,
+                        //     resp[i].LayerFormat,
+                        //     resp[i].Layer_Uploader_name,
+                        //     resp[i].Current_Status
+                        // ]).draw(false);
+                        table.row.add([
+                            resp[i].username,
+                            resp[i].logDate,
+                            resp[i].inTime,
+                            resp[i].outTime,
+                            resp[i].timeLeft,
+                            resp[i].timeDiff,
+                            resp[i].method,
+                            // resp[i].StateName,
+                            // resp[i].CityName,
+                            // resp[i].FirstLayer,
+                            // resp[i].FirstOther,
+                            // resp[i].SecondLayer,
+                            // resp[i].SecondOther,
+                            // resp[i].ThirdLayer,
+                            // resp[i].Layer_Description,
+                            // resp[i].LayerFormat,
+                            // resp[i].Layer_Uploader_name,
+                            // resp[i].Current_Status
+                        ]).draw(false);
                         //}
                     }
                 } else {
@@ -660,6 +853,24 @@
 
     }
 
+    function changeTime(){
+        let name = document.getElementById("usernameLog").value;
+        let hours = document.getElementById("hours").value;
+        let minutes = document.getElementById("minutes").value;
+        //console.log(name);
+
+        $.ajax({
+            url: '/changeTime',
+            type: 'POST',
+            dataType: 'json',
+            async: false,
+            data: {name, hours, minutes},
+            success: function(resp){
+                alert(resp);
+                //console.log(resp);
+            }})
+    }
+
     function downloadCSV2(csv, filename) {
         let csvFile;
         let downloadLink;
@@ -687,13 +898,22 @@
     }
 
     function showFilter(){
-        document.getElementById("submitButton").disabled = false;
-        document.getElementById("submitButton").hidden = false;
+        if(document.getElementById("from").value === '' || document.getElementById("to").value === '' || document.getElementById('firstName').value === '') {
+            donTShowFilter();
+        } else {
+            document.getElementById("submitButton").disabled = false;
+            document.getElementById("submitButton").hidden = false;
+        }
     }
 
     function donTShowFilter() {
         document.getElementById("submitButton").disabled = true;
         document.getElementById("submitButton").hidden = true;
+    }
+
+    function donTShowTime() {
+        document.getElementById("setTime").disabled = true;
+        document.getElementById("setTime").hidden = true;
     }
 
     function showAll() {
@@ -708,13 +928,90 @@
 
 
     function onFunction() {
-        alert("You are now online.");
+        alert ("You are now online.");
     }
 
     function offFunction() {
-        alert("Your are offline. Some functionality may be unavailable.");
+        alert ("Your are offline. Some functionality may be unavailable.");
     }
 
+
+    function showStuff(){
+        $.ajax({
+            url: 'stuff',
+            type: 'GET',
+            dataType: 'json',
+            async: false,
+            success: function (resp) {
+                if (resp.length > 0) {
+                    //console.log(resp);
+                    for (let i = 0; i < resp.length; i++) {
+                        //if (resp[i].username === req.user.username) {
+                        // if (resp[i].ContinentName = 'SA') {
+                        //     layer0continent = "South America";
+                        // } else if (resp[i].ContinentName = 'NA') {
+                        //     layer0continent = "North America";
+                        // } else if (resp[i].ContinentName = 'OC') {
+                        //     layer0continent = "Oceania";
+                        // } else if (resp[i].ContinentName = 'AF') {
+                        //     layer0continent = "Africa";
+                        // } else if (resp[i].ContinentName = 'AS') {
+                        //     layer0continent = "Asia";
+                        // } else if (resp[i].ContinentName = 'EU') {
+                        //     layer0continent = "Europe";
+                        // } else if (resp[i].ContinentName = 'AN') {
+                        //     layer0continent = "Antarctica";
+                        // } else {
+                        //     layer0continent = resp[i].ContinentName;
+                        // }
+                        //layer0continent
+                        // table.row.add([
+                        //     resp[i].Date,
+                        //     resp[i].UID,
+                        //     resp[i].RID,
+                        //     resp[i].LayerCategory,
+                        //     layer0continent,
+                        //     resp[i].CountryName,
+                        //     resp[i].StateName,
+                        //     resp[i].CityName,
+                        //     resp[i].FirstLayer,
+                        //     resp[i].FirstOther,
+                        //     resp[i].SecondLayer,
+                        //     resp[i].SecondOther,
+                        //     resp[i].ThirdLayer,
+                        //     resp[i].Layer_Description,
+                        //     resp[i].LayerFormat,
+                        //     resp[i].Layer_Uploader_name,
+                        //     resp[i].Current_Status
+                        // ]).draw(false);
+                        table.row.add([
+                            resp[i].username,
+                            resp[i].logDate,
+                            resp[i].inTime,
+                            resp[i].outTime,
+                            resp[i].timeLeft,
+                            resp[i].timeDiff,
+                            resp[i].method,
+                            // resp[i].StateName,
+                            // resp[i].CityName,
+                            // resp[i].FirstLayer,
+                            // resp[i].FirstOther,
+                            // resp[i].SecondLayer,
+                            // resp[i].SecondOther,
+                            // resp[i].ThirdLayer,
+                            // resp[i].Layer_Description,
+                            // resp[i].LayerFormat,
+                            // resp[i].Layer_Uploader_name,
+                            // resp[i].Current_Status
+                        ]).draw(false);
+                        //}
+                    }
+                } else {
+                    alert("There are no logs to be shown");
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>

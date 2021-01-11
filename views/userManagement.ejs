@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CitySmart WorldWise - User Management</title>
+    <title>TimeLog - User Management</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="//unpkg.com/flatpickr/dist/flatpickr.min.css">
@@ -148,7 +148,7 @@
         }
 
         .button2 {
-            width: 110px;
+            width: 130px;
             color: #ffffff;
             height: 40px;
             background-color: #a7cb9f;
@@ -191,7 +191,7 @@
 <div class="container" style="width: 900px">
     <div class="container" style="width: 850px">
         <div class="page-header text-center">
-            <h1><span class="fa fa-list"></span><strong> CitySmart WorldWise - User Management </strong></h1>
+            <h1><span class="fa fa-list"></span><strong> TimeLog - User Management </strong></h1>
             <h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>:  <%= user.username %> </h4>
         </div>
     </div>
@@ -287,6 +287,7 @@
         <button id="editUserButton" class="btn delete-row btn-default button2">Edit User</button>
         <button id="suspendUserButton" class="btn btn-default button2" style="width: 140px;">Suspend User(s)</button>
         <button id="showButton" class="btn btn-default button2">Show All</button>
+        <button id="addTime" class="btn delete-row btn-default button2">Adjust Timelog</button>
     </div>
     <br>
     <h4 style="margin-left:80px;"><strong>Most Recent Records:</strong></h4>
@@ -344,7 +345,7 @@
         let rowUserName = [];
 
         $(document).ready(function() {
-            $(function() {
+            $(function () {
                 queryAndDisplay();
 
                 flatpickr(".date", {
@@ -352,8 +353,9 @@
                     time_24hr: true
                 });
             });
+            rowSelected = table.rows('.selected').data();
 
-            $('#dataDisplay tbody').on('click', 'tr', function() {
+            $('#dataDisplay tbody').on('click', 'tr', function () {
                 thArray = [];
                 rowUserName = [];
 
@@ -361,7 +363,7 @@
 
                 rowSelected = table.rows('.selected').data();    //Store all the data for selected rows'
 
-                $('#dataDisplay > thead > tr > th').each(function() {
+                $('#dataDisplay > thead > tr > th').each(function () {
                     thArray.push($(this).text())
                 })
 
@@ -372,7 +374,7 @@
             });
 
 
-            $("#editUserButton").on("click", function() {
+            $("#editUserButton").on("click", function () {
                 if (rowSelected.length >= 2) {
                     confirm("Please make sure to only select ONE of the users to edit.")
                 } else if (rowSelected.length === 0) {
@@ -389,18 +391,42 @@
 
                     let getvalue = table.rows('.selected').data();
                     localStorage.setItem("getvalue", JSON.stringify(getvalue[0]));
-                    console.log(getvalue);
+                    //console.log(getvalue);
 
                     window.location.replace('/editUser');
 
                 }
             });
 
-            $("#suspendUserButton").on("click", function() {
+            $("#addTime").on("click", function () {
+                if (rowSelected.length >= 2) {
+                    alert("Please make sure to only select ONE of the users to edit.")
+                } else if (rowSelected.length === 0) {
+                    alert("No rows have been selected---- please choose ONE.")
+                } else {
+                    let tstring = "";
+                    for (let i = 0; i < thArray.length; i++) {
+                        if (i === 0) {
+                            tstring += thArray[i] + "=" + rowSelected[0][i];
+                        } else {
+                            tstring += "&" + thArray[i] + "=" + rowSelected[0][i];
+                        }
+                    }
+
+                    let getvalue = table.rows('.selected').data();
+                    localStorage.setItem("getvalue", JSON.stringify(getvalue[0]));
+                    //console.log(getvalue);
+
+                    window.location.replace('/timeAdd');
+
+                }
+            });
+
+            $("#suspendUserButton").on("click", function () {
                 if (confirm("Are you sure you would like to suspend the user(s)?")) {
 
                     let usernameStr = "usernameStr=" + rowUserName.toString();
-                    console.log("usernameStr: " + usernameStr);
+                    //console.log("usernameStr: " + usernameStr);
 
                     $.ajax({
                         url: '/suspendUser', //this inside routes
@@ -409,7 +435,7 @@
                         async: false,
                         data: usernameStr,
                         success: function (result) {
-                            console.log(result);
+                            //console.log(result);
                             if (!result.error) {
                                 window.location.reload()
                             } else {
@@ -419,7 +445,7 @@
                     })
                 } else { return false;}
             });
-            $("#showButton").on("click", function() {
+            $("#showButton").on("click", function () {
                 table.clear();
                 table.draw();
                 queryAndDisplay("statusDel=" + "Active");
@@ -431,7 +457,7 @@
         });
 
         function dropDown() {
-            console.log(UserRole);
+            //console.log(UserRole);
             if (UserRole === "Admin") {
                 document.getElementById("userMenuAdmin").classList.toggle("show");
             } else if (UserRole === "Regular") {
@@ -492,7 +518,7 @@
                 async: false,
                 data: querystr,
                 success: function (resp) {
-                    console.log(resp)
+                    //console.log(resp)
                     for (let i = 0; i < resp.length; i++) {
                         table.row.add( [
                             resp[i].username,
@@ -586,11 +612,11 @@
 
 
         function onFunction() {
-            alert("You are now online.");
+            alert ("You are now online.");
         }
 
         function offFunction() {
-            alert("Your are offline. Some functionality may be unavailable.");
+            alert ("Your are offline. Some functionality may be unavailable.");
         }
 
     </script>

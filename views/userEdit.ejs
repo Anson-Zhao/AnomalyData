@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CitySmart WorldWise - Data Management - Edit User</title>
+    <title>TimeLog - Data Management - Edit User</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../css/style_final.css" type="text/css">
     <link rel="stylesheet" href="../css/multi-select.css" media="screen" type="text/css">
@@ -23,7 +23,7 @@
     <script src="//cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="../3rdPartyLibs/jquery.multi-select.js"></script>
     <script src="../3rdPartyLibs/jquery-validation-1.17.0/dist/jquery.validate.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js?render=6Ld7fq8UAAAAAOv8ZEiVj6P972pR_Vf3ko5R0JB_"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcI7LgZAAAAAIl8kDHY2BDminATB5SWG86wzPx9"></script>
     <?php include 'reCaptcha.php';?>
     <style>
         table, th{
@@ -164,6 +164,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Total Required Hours:</label>
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input id="hours" name="hours" class="form-control"  value="" type="number" min = '0' required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">Total Required Minutes:</label>
+                    <div class="col-md-8 inputGroupContainer">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input id="minutes" name="minutes" class="form-control"  value="" type="number" min="0" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group" hidden>
                     <label>Date Modified:</label>
                     <input type="text" id="date" class="form-control" name="dateModified" readonly>
@@ -286,7 +302,8 @@
 
     $(function () {
         flatpickr(".date", {
-            dateFormat: "Y-m-d",
+            enableTime: true,
+            dateFormat: "Y-m-d H:i:S",
             time_24hr: true
         });
     });
@@ -294,9 +311,16 @@
     let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
     let time2 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     let dateTime = date + ' ' + time2;
+    // document.getElementById("date").value = dateTime;
     document.getElementById("date").value = dateTime;
 
+
+
     let getvalue = JSON.parse(localStorage.getItem("getvalue"));
+    let editUser = getvalue[0];
+    //console.log(getvalue);
+    //console.log(editUser);
+    let queryStr1 = "&editUser=" + editUser;
     document.getElementById('username').value = getvalue[0];
     document.getElementById('firstName').value = getvalue[1];
     document.getElementById('lastName').value = getvalue[2];
@@ -308,6 +332,22 @@
     document.getElementById('lastName').placeholder = getvalue[2];
 
     document.getElementById('modUser').value = LoginUser;
+
+    if(document.getElementById('username').value.localeCompare(getvalue[0]) === 0){
+        $.ajax({
+            url: 'display1',
+            method: 'post',
+            data: {dateTime, editUser},
+            dataType: "json",
+            success: function (results) {
+                displayHour = Math.trunc(results/60);
+                displayMinute = Math.trunc(results - (displayHour*60));
+                displaySecond = Math.trunc((results - ((displayHour * 60) + displayMinute)) * 60);
+                document.getElementById('hours').value = displayHour;
+                document.getElementById('minutes').value = displayMinute;
+            }
+        })
+    }
 
     // if (LoginUser === getvalue[0]) {
     //     //Verifies if the current login user is different from the one that is being edited
@@ -346,7 +386,7 @@
         if (checkbox.checked === true) {
             let newP = document.getElementById("newPassword").value;
             let confirmP = document.getElementById("confirmPassword").value;
-            console.log("pass:" + newP);
+            //console.log("pass:" + newP);
             if (confirmP !== "" && newP !== "") {
                 if (newP === confirmP) {
                     $.ajax({
@@ -394,16 +434,16 @@
     }
 
     grecaptcha.ready(function() {
-        grecaptcha.execute('6Ld7fq8UAAAAAOv8ZEiVj6P972pR_Vf3ko5R0JB_', {action: '/edituserform'}).then(function (token) {
-            console.log(token);
+        grecaptcha.execute('6LcI7LgZAAAAAIl8kDHY2BDminATB5SWG86wzPx9', {action: '/edituserform'}).then(function (token) {
+            //console.log(token);
             document.getElementById("token").value = token;
         });
     });
 
     function verifyemail(){
         for (let i =0; i< newusername.length; i++){
-            console.log(document.getElementById("username").value);
-            console.log(newusername[i].username);
+            //console.log(document.getElementById("username").value);
+            //console.log(newusername[i].username);
             if(document.getElementById("username").value === newusername[i].username && document.getElementById("username").value !== UserName){
                 document.getElementById("emailc").innerHTML = "This user name already exists!";
                 break;
@@ -424,8 +464,8 @@
             success: function (results) {
                 for (let i = 0; i < results.length; i++) {
                     // let newRes = JSON.stringify(results);
-                    console.log(value);
-                    console.log(results[i].username);
+                    //console.log(value);
+                    //console.log(results[i].username);
                     if (value === results[i].username && value !== LoginUser) {
                         alert("This username is already taken. Please use a different one.");
                         document.getElementById("emailUser").innerHTML = "This username is already taken. Please use a different one.";

@@ -29,16 +29,20 @@
 	},
 	"files": [
 		"dist/localization/",
-      "dist/additional-methods.js",
+		"dist/additional-methods.js",
 		"dist/jquery.validate.js",
 		"dist/jquery.validate.min.js"
 	],
 	"main": "dist/jquery.validate.js",
 	"dependencies": {
-		"jquery": "^1.7 || ^2.0 || ^3.1"
+		"body-parser": "^1.19.0",
+		"express-mysql-session": "^2.1.4",
+		"jquery": "^1.7 || ^2.0 || ^3.1",
+		"passport": "^0.4.1"
 	},
 	"devDependencies": {
 		"commitplease": "2.3.1",
+		"cookie-parser": "^1.4.5",
 		"grunt": "1.0.1",
 		"grunt-contrib-compress": "1.2.0",
 		"grunt-contrib-concat": "1.0.1",

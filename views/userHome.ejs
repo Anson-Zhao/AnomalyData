@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>CitySmart WorldWise - User Home</title>
+    <title>TimeLog - User Home</title>
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -21,9 +21,9 @@
             padding-bottom: 80px;
             word-wrap:break-word;
         }
-        .floatingBox{
-            display: inline;
-        }
+        /*.floatingBox{*/
+        /*    display: inline;*/
+        /*}*/
         .floating-Box {
             display: inline-block;
             /*width:350px;*/
@@ -70,7 +70,7 @@
             font-size: 16px;
             height: 80px;
             margin: 0;
-            border-radius: 0px 0 0;
+            border-radius: 0 0 0;
             background-color: #000000;
             border: 0 solid;
             color: #ffffff;
@@ -87,23 +87,23 @@
             position: relative;
             display: inline-block;
         }
-        .button1 {
-            height: 40px;
-            width: 110px;
-            float: right;
-            border-radius: 5px;
-            -webkit-transition-duration: 0.4s;
-            transition-duration: 0.4s;
-            cursor: pointer;
-            background-color: white;
-            color: #337ab7;
-            border: 1px solid #337ab7;
-        }
+        /*.button1 {*/
+        /*    height: 40px;*/
+        /*    width: 110px;*/
+        /*    float: right;*/
+        /*    border-radius: 5px;*/
+        /*    -webkit-transition-duration: 0.4s;*/
+        /*    transition-duration: 0.4s;*/
+        /*    cursor: pointer;*/
+        /*    background-color: white;*/
+        /*    color: #337ab7;*/
+        /*    border: 1px solid #337ab7;*/
+        /*}*/
 
-        .button1:hover {
-            background-color: #337ab7;
-            color: white;
-        }
+        /*.button1:hover {*/
+        /*    background-color: #337ab7;*/
+        /*    color: white;*/
+        /*}*/
 
         .dropbutton {
             float: right;
@@ -139,18 +139,24 @@
         .dropdown a:hover {
             background-color: #ddd;
         }
-        .show {
-            display: block;
-        }
+        /*.show {*/
+        /*    display: block;*/
+        /*}*/
+        /*div.floating-Box_clearForm {     !* this will hide div with class div_class_name *!*/
+        /*    display:none;*/
+        /*}*/
+        /*div.buttons {     !* this will hide div with class div_class_name *!*/
+        /*    display:none;*/
+        /*}*/
     </style>
 </head>
 <div class="navul" style="height:80px;background:#000000;">
     <a class="navul" style="background:#000000;" href="http://aworldbridge.com">
         <img class="banner" src="/images/NewWBBanner.jpg" style="width: 500px;height:76px;"/>
     </a>
-    <a href="/homepageLI" style="width:110px;">
-        <button class="navbutton1"> Homepage </button>
-    </a>
+<!--    <a href="/homepageLI" style="width:110px;">-->
+<!--        <button class="navbutton1"> Homepage </button>-->
+<!--    </a>-->
 <!--    <a href="/newRequest" id= "Request" style="width:110px;">-->
 <!--        <button class="navbutton1" style="width: 140px"> New Request </button>-->
 <!--    </a>-->
@@ -159,10 +165,10 @@
 <!--    </a>-->
     <a href="/dataHistory" style="width:110px;">
         <button class="navbutton1" style="width: 160px"> Data History </button>
-<!--    </a>-->
-<!--    <a href="/rejected" style="width:110px;">-->
-<!--        <button class="navbutton1" style="width: 160px"> Rejected Requests </button>-->
-<!--    </a>-->
+    </a>
+    <a href="/rejected" style="width:110px;">
+        <button class="navbutton1" style="width: 160px; display: none"> Rejected Requests </button>
+    </a>
     <div class="dropdown" style="height: 80px; width: 200px; float: right; margin: 0;">
         <button onclick="dropDown()" class="dropbutton" id="Username">
             <%= firstName%>
@@ -183,9 +189,10 @@
 
 <div class="container center">
     <div class="page-header text-center header">
-        <h1><span class="fa fa-home"></span><strong> CitySmart WorldWise - User Home </strong></h1><h4><span class="fa fa-user"></span>
+        <h1><span class="fa fa-home"></span><strong> Time Log - User Home </strong></h1><h4><span class="fa fa-user"></span>
             <strong>Account Name</strong>: <%= user.username %></h4>
                 <strong id = 'Left'>Minutes Still Needed</strong><br>
+                <strong id = 'total'>Total Time Left</strong>
 
     </div>
 </div>
@@ -193,146 +200,23 @@
 
 <div class="container" style="width: 900px;">
     <div class="center floating-Box clearForm" style="width: 690px;">
-        <h4 class="floating-Box" style="width: 220px;"><strong>Date Range:&nbsp;</strong></h4>
+        <h4 class="floating-Box" style="width: 220px;"><strong>Time Log:&nbsp;</strong></h4>
         <div style="width: 350px;">
             <button id = "timeIn" style="width: 160px"> Log Start Time &nbsp;</button>
-            <button id = "timeOut" style="width: 160px"> Log End Time &nbsp;</button><br>
-            <button id = "edit" disabled style="width: 160px">Admin Edit Logs</button><br>
-            <h5 class="floating-Box" style="width: 50px;"><br>From:&nbsp;</h5>&nbsp;
-            <input class="date floating-Box" id= "From" type="text" placeholder="Select Date" style="width: 280px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" onchange="showFilter()">
-            <h5 class="floating-Box" style="width: 50px;">To:&nbsp;</h5>&nbsp;
-            <input class="date floating-Box" id= "To" type="text" placeholder="Select Date" style="width: 280px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" onchange="showFilter()">
+            <button id = "timeOut" style="width: 160px"> Log End Time &nbsp;</button><br><br>
         </div>
     </div>
-    <div class="floating-Box clearForm" id="searchname" style="width: 350px;">
-        <h4 class="floatingBox" style="width: 220px;"><strong>User Name:&nbsp;</strong></h4>
-        <div class="name" style="width: 375px;">
-            <h5 class="floating-Box">First Name:</h5>
-            <input class="floating-Box" id="firstName" type="text" name="first name" style="background: WhiteSmoke;
-    width: 275px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">
-        </div>
-    </div>
-
-    <div class="floating-Box clearForm" id="deleteHours" style="width: 1000px;">
-        <h4 class="floatingBox" style="width: 220px;"><strong>Time to change:&nbsp;</strong></h4>
-        <div class="time" style="width: 375px;">
-            <h5 class="floating-Box">Hours to add/delete:</h5>
-            <input class="floating-Box" id="Hours" type="number" name="hours" min = '0' style="background: WhiteSmoke;
-    width: 275px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">
-            <h5 class="floating-Box">Minutes to add/delete:</h5>
-            <input class="floating-Box" id="Minutes" type="number" name="minutes" min = '0' style="background: WhiteSmoke;
-    width: 275px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" value="" onchange="showFilter()">
-        </div>
-    </div>
-
     <br>
     <br>
-    <div class="center" style="width: 850px;
-    padding: 0px;
-    height: 40px;">
-        <button id = "add" type = "button" style="height: 40px; width: 110px; float: left;margin-right: 5px;">Add Time</button>
-        <button id = "remove" type = "button" style="height: 40px; width: 110px; float: left;margin-right: 5px;">Remove Time</button>
-        <button id="submitButton" class="button1" type="button"  onclick="query(), showAll()" hidden disabled>Filter</button>
-        <button id="editButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px; width: 110px; float: left;margin-right: 5px;">Edit</button>
-        <button id="deleteButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
-    width: 110px; float: left; margin-right: 5px;">Delete</button>
-        <button id="showButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
-    width: 110px; float: left" onclick="donTShowAll()" disabled hidden>Show All</button>
-    </div>
-    <br>
-<!--    <div class="center" style="width: 850px;">-->
-<!--        <h4 id="subtitles"><strong>Most Recent Pending Records </strong></h4>-->
-<!--        <h5>Continent Key</h5>-->
-<!--        <p>SA: South America <br> NA: North America <br> OC: Oceania <br> EU: Europe <br> AS: Asia <br> AF: Africa <br> AN: Antarctica</p>-->
-<!--        <div id="dvData">-->
-<!--            <table id="dataDisplay">-->
-<!--                <thead>-->
-<!--                <tr>-->
-<!--                    <th>Date</th>-->
-<!--                    <th>UID</th>-->
-<!--                    <th>RID</th>-->
-<!--                    <th>Layer Type</th>-->
-<!--                    <th>Layer Continent</th>-->
-<!--                    <th>Layer Country</th>-->
-<!--                    <th>Layer State</th>-->
-<!--                    <th>Layer City</th>-->
-<!--                    <th>Main Category</th>-->
-<!--                    <th>Other Main Category</th>-->
-<!--                    <th>Sub Category</th>-->
-<!--                    <th>Other Sub Category</th>-->
-<!--                    <th>Layer Display Name</th>-->
-<!--                    <th>Layer Description</th>-->
-<!--                    <th>Layer Format</th>-->
-<!--                    <th>Layer Uploader Name</th>-->
-<!--                    <th>Current_Status</th>-->
-<!--                    <th>Comments</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-
-<!--                </tbody>-->
-<!--                <tfoot>-->
-<!--                <tr>-->
-<!--                    <th>Date</th>-->
-<!--                    <th>UID</th>-->
-<!--                    <th>RID</th>-->
-<!--                    <th>Layer Type</th>-->
-<!--                    <th>Layer Continent</th>-->
-<!--                    <th>Layer Country</th>-->
-<!--                    <th>Layer State</th>-->
-<!--                    <th>Layer City</th>-->
-<!--                    <th>Main Category</th>-->
-<!--                    <th>Other Main Category</th>-->
-<!--                    <th>Sub Category</th>-->
-<!--                    <th>Other Sub Category</th>-->
-<!--                    <th>Layer Display Name</th>-->
-<!--                    <th>Layer Description</th>-->
-<!--                    <th>Layer Format</th>-->
-<!--                    <th>Layer Uploader Name</th>-->
-<!--                    <th>Current_Status</th>-->
-<!--                    <th>Comments</th>-->
-<!--                </tr>-->
-<!--                </tfoot>-->
-<!--            </table>-->
-<!--            &lt;!&ndash; formal table //approve //recovery&ndash;&gt;-->
-<!--        </div>-->
-<!--    </div>-->
 </div>
+    <br>
+<!--</div>-->
 <script type='text/javascript'>
     let firstName = "<%= firstName %>";
     let lastName = "<%= lastName %>";
     let username = "<%= user.username %>";
     // console.log(username);
-    let rowSelected, picPath;
-    let table = $("#dataDisplay").DataTable();
     let UserRole = "<%= user.userrole %>";
-    let transactionID = [];
-    let LayerNameStr = [];
     let queryStr;
     let logInButton = document.getElementById('timeIn');
     let logOutButton = document.getElementById('timeOut');
@@ -347,9 +231,9 @@
     let displayHour;
     let displayMinute;
     let displaySecond;
-    let adminButton = document.getElementById('edit');
-    let addButton = document.getElementById('add');
-    let removeButton = document.getElementById('remove');
+    // let adminButton = document.getElementById('edit');
+    // let addButton = document.getElementById('add');
+    // let removeButton = document.getElementById('remove');
 
 
 
@@ -362,18 +246,15 @@
                 time_24hr: true
             });
 
-            table.clear();
-            table.draw();
-
             if (UserRole === "Regular") {
                 document.getElementById('searchname').style.display = "none"; //disables username search for regular members
                 queryStr = "Current_Status=Pending&UID=" + username;
             } else {
                 queryStr = "Current_Status=Pending";
-                adminButton.disabled = false;
+                // adminButton.disabled = false;
             }
-            console.log(queryStr);
-            queryAndDisplay(queryStr);
+            //console.log(queryStr);
+            //queryAndDisplay(queryStr);
 
             //the console below refers to the above as querystr
             // just for the Pending table
@@ -390,101 +271,26 @@
                 displayHour = Math.trunc(results/60);
                 displayMinute = Math.trunc(results - (displayHour*60));
                 displaySecond = Math.trunc((results - ((displayHour * 60) + displayMinute)) * 60);
-                let display = "Hours Still Needed: " + displayHour + ":" + displayMinute + ":" + displaySecond;
+                let display = "Time Still Needed: " + displayHour + ":" + displayMinute + ":" + displaySecond;
                 document.getElementById('Left').innerHTML = display;
             }})
 
-        $('#dataDisplay tbody').on('click', 'tr', function () {
-            transactionID = [];
-            picPath = [];
-            $(this).toggleClass('selected');    //toggle class for the rows selected
-            // $(this).toggleClass('change');   //toggle class change color
-            // changeColor();
-
-            rowSelected = table.rows('.selected').data();    //Store all the data for selected rows'
-
-            // $('#dataDisplay > thead > tr > th').each(function () {
-            //     thArray.push($(this).text())
-            // })
-
-            for (let i = 0; i < rowSelected.length; i++) {
-//                console.log("rowSelected[" + i + "][0]: " + rowSelected[i][0]);
-                transactionID.push(rowSelected[i][2]); //object variable / push means insert this value into ScoutingID
-                picPath.push(rowSelected[i][15]);
-                LayerNameStr.push(rowSelected[i][11]);
+        $.ajax({
+            url: 'displayTotal',
+            method: 'get',
+            dataType: "json",
+            success: function (results) {
+                displayHour = Math.trunc(results / 60);
+                displayMinute = Math.trunc(results - (displayHour * 60));
+                displaySecond = Math.trunc((results - ((displayHour * 60) + displayMinute)) * 60);
+                let display = " Total Time Required: " + displayHour + ":" + displayMinute + ":" + displaySecond;
+                document.getElementById('total').innerHTML = display;
             }
-        });
-
-        $("#editButton").on("click", function () {
-            // console.log(transactionID);
-            if (transactionID.length >= 2) {
-                confirm("Please make sure to only select ONE entry to edit.")
-            } else if (transactionID.length === 0) {
-                confirm("No rows have been selected ---- please choose ONE.")
-            } else {
-                // let transactionIDStr = "transactionIDStr=" + transactionID.toString();
-                let rowSelectedValue = table.rows('.selected').data();
-                localStorage.setItem("rowSelectedValue", JSON.stringify(rowSelectedValue[0]));
-                window.location.replace('/editdata');
-                // console.log(localStorage.getItem("rowSelectedValue"));
-            }
-            console.log(rowSelectedValue = table.rows('.selected').data());
-        });
-
-        $("#deleteButton").on("click", function () {
-            if (confirm("Are you sure you would like to trashfolder the row(s) you selected?") === true) {
-                // console.log(transactionID); //provides the associated values of the element(record) in the array
-
-                let transactionIDStr = "transactionIDStr=" + transactionID.toString();//combines Scouting ID with the trapID
-                console.log(transactionIDStr);
-                let pictureStr = "pictureStr=" + picPath.toString();
-                let LayerName = "LayerName=" + LayerNameStr.toString();
-                console.log(transactionIDStr + '&' + pictureStr + '&' + LayerName);
-                $.ajax({
-                    url: '/deleteData',
-                    type: "GET",
-                    dataType: 'json',
-                    data: transactionIDStr + '&' + pictureStr + '&' + LayerName,
-                    success: function (result) {
-                        console.log(result);
-                        window.location.reload();
-                    }
-                });
-
-
-            } else {
-                return false;
-
-            }
-        });
-
-        $("#showButton").on("click", function () {
-            let qStr;
-            table.clear();
-            table.draw();
-            // queryAndDisplay(hjkhjkhk);
-            $(".clearForm input[type='text']").val('');
-            $(".filter").val(''); //no function here so button does nothing
-            $(".date").val('');
-
-            if (UserRole === "Regular") {
-                document.getElementById('searchname').style.display = "none"; //disables username search for regular members
-                qStr = "UID=" + username;
-            } else {
-                qStr = "";//this line is for the admin, who does not need to only see a specific UID, but all records
-            }
-
-            // let qStr = "UID=" + username;
-            //must be blank so you can get everyone's records and then the filters down below will distinguish between approved, pending, and deleted records
-            //still keep UID because it is a changing variable whereas the first two are constant
-            // console.log(table.clear);
-            // console.log(qStr);
-            queryAndDisplay(qStr);
-        });
+        })
     });
 
     function dropDown() {
-        console.log(UserRole);
+        //console.log(UserRole);
         if (UserRole === "Admin") {
             document.getElementById("userMenuAdmin").classList.toggle("show");
         } else if (UserRole === "Regular") {
@@ -503,120 +309,6 @@
         }
     }
 
-    (function() {
-        $('form > input').keyup(function() {
-            var empty = false;
-            $('form > input').each(function() {
-                if ($(this).val() == '')
-                {
-                    empty = true;
-                }
-            });
-            if (empty)
-            {
-                $('#add').attr('disabled', 'disabled');
-            }
-            else
-            {
-                $('#add').removeAttr('disabled');
-            }
-        });
-    })()
-
-
-    function query() {
-        let firstName = document.getElementById("firstName").value;
-        let lastName = document.getElementById("lastName").value;
-        let startDate = document.getElementsByClassName("date")[0].value;
-        let endDate = document.getElementsByClassName("date")[1].value;
-
-        queryStr = "firstName=" + firstName + "&lastName=" + lastName + "&startDate=" + startDate + "&endDate=" + endDate;
-        // queryStr2 = "firstName=" + firstName + "&lastName=" + lastName + "&startDate=" + startDate + "&endDate=" + endDate;
-//This queryStr is for the admin's filtering options, that's why you need first and last names
-        table.clear();
-        table.draw();
-        // trapTable.clear();
-        // trapTable.draw();
-        queryAndDisplay(queryStr);
-        // queryAndDisplay(queryStr2);
-    }
-
-    let queryAndDisplay = function (query) {
-        $.ajax({
-            url: '/layerReqQuery',
-            type: 'GET',
-            dataType: 'json',
-            async: false,
-            data: query, //status="active or pending" & username=@ after deleting records, you reload table which shows a new output not including the deleted records - it's still an instance of filtering
-            success: function (results) {
-                console.log(results);
-                if (results.errMsg === "no data") {
-                    alert("You currently have no pending data entries!");//this right here will let users know that they currently have no pending records;
-                    //clarifies that it is not an error
-                    table.draw();
-                } else if (results.errMsg === "fail") {
-                    alert("There is query error!");//this right here will let users know there is an query error;
-                    table.draw();
-                } else {
-                    for (let i = 0; i < results.length; i++) {
-
-                        if (results[i].Current_Status === "Pending" || results[i].Current_Status === "Approved" || results[i].Current_Status === "Rejected") {
-
-                            table.row.add([
-                                results[i].Date,
-                                results[i].UID,
-                                results[i].RID,
-                                results[i].LayerCategory,
-                                results[i].ContinentName,
-                                results[i].CountryName,
-                                results[i].StateName,
-                                results[i].CityName,
-                                results[i].FirstLayer,
-                                results[i].FirstOther,
-                                results[i].SecondLayer,
-                                results[i].SecondOther,
-                                results[i].ThirdLayer,
-                                results[i].Layer_Description,
-                                results[i].LayerFormat,
-                                results[i].Layer_Uploader_name,
-                                results[i].Current_Status,
-                                results[i].Comments
-                            ]).draw(false);
-                        }
-                        //start a new set of if statements for the admin here
-
-                    }
-                }
-
-            }
-        })
-    }
-
-    function showFilter(){
-        if (document.getElementById("From").length === 0  && document.getElementById("To").length === 0  && document.getElementById("firstName").value !== '' && document.getElementById("lastName").value === '') {
-            document.getElementById("submitButton").disabled = true;
-            document.getElementById("submitButton").hidden = true;
-        } else {
-            document.getElementById("submitButton").disabled = false;
-            document.getElementById("submitButton").hidden = false;
-        }
-    }
-
-    // function donTShowFilter() {
-    //     document.getElementById("submitButton").disabled = true;
-    //     document.getElementById("submitButton").hidden = true;
-    // }
-
-    function showAll() {
-        document.getElementById("showButton").disabled = false;
-        document.getElementById("showButton").hidden = false;
-    }
-
-    function donTShowAll() {
-        document.getElementById("showButton").disabled = true;
-        document.getElementById("showButton").hidden = true;
-    }
-
     function onFunction() {
         alert ("You are now online.");
     }
@@ -625,53 +317,34 @@
         alert ("Your are offline. Some functionality may be unavailable.");
     }
 
-    addButton.addEventListener("click", function(){
-        let day = document.getElementsByClassName("date")[0].value;
-        let user = document.getElementById("firstName").value;
-        let hours = document.getElementById("Hours").value;
-        let minutes = document.getElementById("Minutes").value;
-        $.ajax({
-            url: 'add',
-            data: {day, user,hours, minutes},
-            method: 'post',
-            dataType: 'json',
-            success: function(results){
-                alert(results);
-            }
-        })
-    })
-
-    removeButton.addEventListener("click", function(){
-        let day = document.getElementsByClassName("date")[0].value;
-        let user = document.getElementById("firstName").value;
-        let hours = document.getElementById("Hours").value;
-        let minutes = document.getElementById("Minutes").value;
-        $.ajax({
-            url: 'remove',
-            data: {day, user,hours, minutes},
-            method: 'post',
-            dataType: 'json',
-            success: function(results){
-                alert(results);
-            }
-        })
-    })
-
     logInButton.addEventListener("click", function () {
-        logInTime = new Date();
-        let send = logInTime.getFullYear() + "-" + logInTime.getMonth() + "-" + logInTime.getDate();
-        let send1 = logInTime.getHours() + ":" + logInTime.getMinutes() + ":" + logInTime.getSeconds();
-        console.log(logInTime.getUTCMonth());
+        $(function () {
+            flatpickr(".date", {
+                enableTime: true,
+                dateFormat: "Y-m-d",
+                timeFormat: "H:i:S",
+                time_24hr: true
+            });
+        });
+        let today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        let time2 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        //let dateTime = date + ' ' + time2;
+        //logInTime = new Date();
+        //let send = logInTime.getFullYear() + "-" + logInTime.getMonth() + "-" + logInTime.getDate();
+        //let send1 = logInTime.getHours() + ":" + logInTime.getMinutes() + ":" + logInTime.getSeconds();
+        //console.log(logInTime.getUTCMonth());
         //console.log(send1);
         //buttonOut.disabled = false;
         //buttonIn.disabled = true;
         $.ajax({
             url: 'inTime',
-            data: {send, send1},
+            data: {date, time2},
             method: 'post',
             dataType: 'json',
             success: function(results){
-                console.log("boi WHY ARE YOU LOOKING AT THE CONSOLE for what reason are you here like u aren't editing this so why are u here?");
+                //console.log(results);
+                //console.log("boi WHY ARE YOU LOOKING AT THE CONSOLE for what reason are you here like u aren't editing this so why are u here?");
                 alert("You have successfully clocked in!")
             }
         })
@@ -679,7 +352,19 @@
     })
 
     logOutButton.addEventListener("click", function () {
-        logOutTime = new Date();
+        $(function () {
+            flatpickr(".date", {
+                enableTime: true,
+                dateFormat: "Y-m-d",
+                timeFormat: "H:i:S",
+                time_24hr: true
+            });
+        });
+        let today = new Date();
+        let date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        let time2 = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        //let dateTime = date + ' ' + time2;
+        //logOutTime = new Date();
         // logInLength = logOutTime.getTime() - logInTime.getTime();
         // console.log(logInLength);
         // seconds = logInLength / 1000;
@@ -688,17 +373,17 @@
         // hours = minutes / 60;
         // console.log(hours);
         // hours = hours.toString();
-        let cool = logOutTime.getFullYear() + "-" + logOutTime.getMonth() + "-" + logOutTime.getDate();
-        let lmao = logOutTime.getHours() + ":" + logOutTime.getMinutes() + ":" + logOutTime.getSeconds();
+        //let cool = logOutTime.getFullYear() + "-" + logOutTime.getMonth() + "-" + logOutTime.getDate();
+        //let lmao = logOutTime.getHours() + ":" + logOutTime.getMinutes() + ":" + logOutTime.getSeconds();
         let ret;
         $.ajax({
             url: 'time',
-            data: {cool, lmao},
+            data: {date, time2},
             method: 'post',
             dataType: "json",
             success: function (results) {
                 ret = results;
-                console.log(ret);
+                //console.log(ret);
                 alert(ret);
             }})
         //buttonOut.disabled = true;
