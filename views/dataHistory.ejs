@@ -17,6 +17,7 @@
     <script src="//cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/flatpickr"></script>
+
     <!--<script src="//unpkg.com/flatpickr"></script>-->
 
     <style>
@@ -206,7 +207,7 @@
 <body ononline="onFunction()" onoffline="offFunction()">
 <div class="container">
     <div class="page-header text-center">
-        <h1><span class="fa fa-check-square-o"></span><strong> Time Log - Log History </strong></h1>
+        <h1><span class="fa fa-check-square-o"></span><strong> Anomaly Log - Log History </strong></h1>
         <h4><span class="fa fa-user"></span>&nbsp;<strong>Account Name</strong>: <%= user.username %></h4>
     </div>
 </div>
@@ -339,11 +340,11 @@
     padding: 0px;
     height: 40px;">
             <button id="submitButton" class="button1" type="button" onclick="query(), showAll()" hidden disabled>Filter</button>
-            <button id="filterDate" class="btn btn-primary btn-sm button" type="button" onclick="queryDate()" style="height: 40px;
+            <button id="filterDate" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
                 width: 110px; float: left; margin-right: 5px;">Filter By Date</button>
             <button id="showButton" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
     width: 110px; float: left; margin-right: 5px;">Refresh Table</button>
-            <button id="showAll" class="btn btn-primary btn-sm button" type="button" onclick="queryAllDisplay()" style="height: 40px;
+            <button id="showAll" class="btn btn-primary btn-sm button" type="button" style="height: 40px;
                 width: 110px; margin-right: 5px;" hidden disabled>Show Everyone</button>
         </div>
     <br>
@@ -354,38 +355,37 @@
         <div id="dvData">
             <table id="dataDisplay">
                 <thead>
-                <tr>
-                    <th>username</th>
-                    <th>Date</th>
-                    <th>In Time</th>
-                    <th>Out Time</th>
-                    <th>Minutes Left</th>
-                    <th>Time Difference</th>
-                    <th>Method</th>
+                <tr id="theadRow">
                 </tr>
                 </thead>
                 <tbody>
                 </tbody>
-                <tfoot>
-                <tr>
-                    <th>username</th>
-                    <th>Date</th>
-                    <th>In Time</th>
-                    <th>Out Time</th>
-                    <th>Minutes Left</th>
-                    <th>Time Difference</th>
-                    <th>Method</th>
-                </tr>
-                </tfoot>
             </table>
 
             <br>
-            <button class="button2" onclick="exportTableToCSV('Scouting_<%= user.username %>.csv')">Export above rows to .CSV File</button>
+            <button id="buttontwo" class="button2">Export above rows to .CSV File</button>
+
+            <br><br>
+            <button id = "editButton" style="color: gray" disabled> Edit Row </button>
         </div>
     </div>
     <!--<div id="map" style="width:100%; height:400px;"></div>-->
 </div>
 <script type='text/javascript'>
+    $.ajax({
+        url: '/getcolumns',
+        method: 'get',
+        success: function (response) {
+            var head = document.getElementById("theadRow");
+            var columns = response;
+            for (var i = 0; i < columns.length; i++) {
+                console.log(columns[i]);
+                var column = document.createElement("th");
+                column.textContent = columns[i];
+                head.appendChild(column);
+            }
+
+
     let table = $("#dataDisplay").DataTable();
     // let trapTable = $("#trapDisplay").DataTable();
     let UserRole = "<%= user.userrole %>";
@@ -412,13 +412,13 @@
             });
 
             if (UserRole === "Regular") {
-                document.getElementById("deleteButton").style.display = "none";
-                document.getElementById("admin-edit").style.display = "none";
-                document.getElementById("admin-name-search").style.display = "none";
-                document.getElementById("usernameLog").style.display = "none";
-                document.getElementById("admin-time-change").style.display = "none";
-                document.getElementById("hours").style.display = "none";
-                document.getElementById("minutes").style.display = "none";
+                //document.getElementById("deleteButton").style.display = "none";
+                //document.getElementById("admin-edit").style.display = "none";
+                //document.getElementById("admin-name-search").style.display = "none";
+                //document.getElementById("usernameLog").style.display = "none";
+                //document.getElementById("admin-time-change").style.display = "none";
+                //document.getElementById("hours").style.display = "none";
+                //document.getElementById("minutes").style.display = "none";
             }
 
             if (UserRole !== "Regular") {
@@ -459,7 +459,7 @@
             }
         });
 
-
+/*
         $("#deleteButton").on("click", function () {
             if (confirm("Are you sure you would like to reject this row(s)?") === true) {
                 let transactionIDStr = "transactionIDStr=" + transactionID.toString();
@@ -478,7 +478,7 @@
                     }
                 })
             } else { return false;}
-        });
+        }); */
 
         $("#showButton").on("click", function () {
             table.clear();
@@ -579,69 +579,15 @@
             url: '/filterQuery',
             type: 'GET',
             dataType: 'json',
-            async: false,
+            async: true,
             data: querystr,
             success: function (resp) {
                 if (!resp[0].errMsg) {
                     //console.log(resp);
                     for (let i = 0; i < resp.length; i++) {
-                        //if (resp[i].username === req.user.username) {
-                            // if (resp[i].ContinentName = 'SA') {
-                            //     layer0continent = "South America";
-                            // } else if (resp[i].ContinentName = 'NA') {
-                            //     layer0continent = "North America";
-                            // } else if (resp[i].ContinentName = 'OC') {
-                            //     layer0continent = "Oceania";
-                            // } else if (resp[i].ContinentName = 'AF') {
-                            //     layer0continent = "Africa";
-                            // } else if (resp[i].ContinentName = 'AS') {
-                            //     layer0continent = "Asia";
-                            // } else if (resp[i].ContinentName = 'EU') {
-                            //     layer0continent = "Europe";
-                            // } else if (resp[i].ContinentName = 'AN') {
-                            //     layer0continent = "Antarctica";
-                            // } else {
-                            //     layer0continent = resp[i].ContinentName;
-                            // }
-                            // table.row.add([
-                            //     resp[i].Date,
-                            //     resp[i].UID,
-                            //     resp[i].RID,
-                            //     resp[i].LayerCategory,
-                            //     layer0continent,
-                            //     resp[i].CountryName,
-                            //     resp[i].StateName,
-                            //     resp[i].CityName,
-                            //     resp[i].FirstLayer,
-                            //     resp[i].FirstOther,
-                            //     resp[i].SecondLayer,
-                            //     resp[i].SecondOther,
-                            //     resp[i].ThirdLayer,
-                            //     resp[i].Layer_Description,
-                            //     resp[i].LayerFormat,
-                            //     resp[i].Layer_Uploader_name,
-                            //     resp[i].Current_Status
-                            // ]).draw(false);
-                            table.row.add([
-                                resp[i].username,
-                                resp[i].logDate,
-                                resp[i].inTime,
-                                resp[i].outTime,
-                                resp[i].timeLeft,
-                                resp[i].timeDiff,
-                                resp[i].method,
-                                // resp[i].StateName,
-                                // resp[i].CityName,
-                                // resp[i].FirstLayer,
-                                // resp[i].FirstOther,
-                                // resp[i].SecondLayer,
-                                // resp[i].SecondOther,
-                                // resp[i].ThirdLayer,
-                                // resp[i].Layer_Description,
-                                // resp[i].LayerFormat,
-                                // resp[i].Layer_Uploader_name,
-                                // resp[i].Current_Status
-                            ]).draw(false);
+                        var values = Object.values(resp[i])
+                        console.log(values);
+                        table.row.add(values).draw(false);
                         //}
                     }
                 } else {
@@ -657,70 +603,15 @@
             url: '/dateStuff',
             type: 'GET',
             dataType: 'json',
-            async: false,
+            async: true,
             data: querystr1,
             success: function (resp) {
                 if (resp.length > 0) {
                     //console.log(resp);
                     for (let i = 0; i < resp.length; i++) {
-                        //if (resp[i].username === req.user.username) {
-                        // if (resp[i].ContinentName = 'SA') {
-                        //     layer0continent = "South America";
-                        // } else if (resp[i].ContinentName = 'NA') {
-                        //     layer0continent = "North America";
-                        // } else if (resp[i].ContinentName = 'OC') {
-                        //     layer0continent = "Oceania";
-                        // } else if (resp[i].ContinentName = 'AF') {
-                        //     layer0continent = "Africa";
-                        // } else if (resp[i].ContinentName = 'AS') {
-                        //     layer0continent = "Asia";
-                        // } else if (resp[i].ContinentName = 'EU') {
-                        //     layer0continent = "Europe";
-                        // } else if (resp[i].ContinentName = 'AN') {
-                        //     layer0continent = "Antarctica";
-                        // } else {
-                        //     layer0continent = resp[i].ContinentName;
-                        // }
-                        //layer0continent
-                        // table.row.add([
-                        //     resp[i].Date,
-                        //     resp[i].UID,
-                        //     resp[i].RID,
-                        //     resp[i].LayerCategory,
-                        //     layer0continent,
-                        //     resp[i].CountryName,
-                        //     resp[i].StateName,
-                        //     resp[i].CityName,
-                        //     resp[i].FirstLayer,
-                        //     resp[i].FirstOther,
-                        //     resp[i].SecondLayer,
-                        //     resp[i].SecondOther,
-                        //     resp[i].ThirdLayer,
-                        //     resp[i].Layer_Description,
-                        //     resp[i].LayerFormat,
-                        //     resp[i].Layer_Uploader_name,
-                        //     resp[i].Current_Status
-                        // ]).draw(false);
-                        table.row.add([
-                            resp[i].username,
-                            resp[i].logDate,
-                            resp[i].inTime,
-                            resp[i].outTime,
-                            resp[i].timeLeft,
-                            resp[i].timeDiff,
-                            resp[i].method,
-                            // resp[i].StateName,
-                            // resp[i].CityName,
-                            // resp[i].FirstLayer,
-                            // resp[i].FirstOther,
-                            // resp[i].SecondLayer,
-                            // resp[i].SecondOther,
-                            // resp[i].ThirdLayer,
-                            // resp[i].Layer_Description,
-                            // resp[i].LayerFormat,
-                            // resp[i].Layer_Uploader_name,
-                            // resp[i].Current_Status
-                        ]).draw(false);
+                        var values = Object.values(resp[i])
+                        console.log(values);
+                        table.row.add(values).draw(false);
                         //}
                     }
                 } else {
@@ -735,70 +626,15 @@
             url: '/filterAllQuery',
             type: 'GET',
             dataType: 'json',
-            async: false,
+            async: true,
             data: querystr,
             success: function (resp) {
                 if (!resp[0].errMsg) {
                     //console.log(resp);
                     for (let i = 0; i < resp.length; i++) {
-                        //if (resp[i].username === req.user.username) {
-                        // if (resp[i].ContinentName = 'SA') {
-                        //     layer0continent = "South America";
-                        // } else if (resp[i].ContinentName = 'NA') {
-                        //     layer0continent = "North America";
-                        // } else if (resp[i].ContinentName = 'OC') {
-                        //     layer0continent = "Oceania";
-                        // } else if (resp[i].ContinentName = 'AF') {
-                        //     layer0continent = "Africa";
-                        // } else if (resp[i].ContinentName = 'AS') {
-                        //     layer0continent = "Asia";
-                        // } else if (resp[i].ContinentName = 'EU') {
-                        //     layer0continent = "Europe";
-                        // } else if (resp[i].ContinentName = 'AN') {
-                        //     layer0continent = "Antarctica";
-                        // } else {
-                        //     layer0continent = resp[i].ContinentName;
-                        // }
-                        //layer0continent
-                        // table.row.add([
-                        //     resp[i].Date,
-                        //     resp[i].UID,
-                        //     resp[i].RID,
-                        //     resp[i].LayerCategory,
-                        //     layer0continent,
-                        //     resp[i].CountryName,
-                        //     resp[i].StateName,
-                        //     resp[i].CityName,
-                        //     resp[i].FirstLayer,
-                        //     resp[i].FirstOther,
-                        //     resp[i].SecondLayer,
-                        //     resp[i].SecondOther,
-                        //     resp[i].ThirdLayer,
-                        //     resp[i].Layer_Description,
-                        //     resp[i].LayerFormat,
-                        //     resp[i].Layer_Uploader_name,
-                        //     resp[i].Current_Status
-                        // ]).draw(false);
-                        table.row.add([
-                            resp[i].username,
-                            resp[i].logDate,
-                            resp[i].inTime,
-                            resp[i].outTime,
-                            resp[i].timeLeft,
-                            resp[i].timeDiff,
-                            resp[i].method,
-                            // resp[i].StateName,
-                            // resp[i].CityName,
-                            // resp[i].FirstLayer,
-                            // resp[i].FirstOther,
-                            // resp[i].SecondLayer,
-                            // resp[i].SecondOther,
-                            // resp[i].ThirdLayer,
-                            // resp[i].Layer_Description,
-                            // resp[i].LayerFormat,
-                            // resp[i].Layer_Uploader_name,
-                            // resp[i].Current_Status
-                        ]).draw(false);
+                        var values = Object.values(resp[i])
+                        console.log(values);
+                        table.row.add(values).draw(false);
                         //}
                     }
                 } else {
@@ -834,7 +670,7 @@
         downloadLink.click();
     }
 
-    function exportTableToCSV(filename) {
+    function exportTableToCSV() {
         let csv = [];
 //        let table = document.querySelector('#trapDisplay');
         let rows = document.querySelector("#dataDisplay").querySelectorAll(".selected, thead");
@@ -849,7 +685,7 @@
         }
 
         // Download CSV file
-        downloadCSV(csv.join("\n"), filename);
+        downloadCSV(csv.join("\n"), '<%= user.username %>.csv');
 
     }
 
@@ -863,7 +699,7 @@
             url: '/changeTime',
             type: 'POST',
             dataType: 'json',
-            async: false,
+            async: true,
             data: {name, hours, minutes},
             success: function(resp){
                 alert(resp);
@@ -897,20 +733,6 @@
         downloadLink.click();
     }
 
-    function showFilter(){
-        if(document.getElementById("from").value === '' || document.getElementById("to").value === '' || document.getElementById('firstName').value === '') {
-            donTShowFilter();
-        } else {
-            document.getElementById("submitButton").disabled = false;
-            document.getElementById("submitButton").hidden = false;
-        }
-    }
-
-    function donTShowFilter() {
-        document.getElementById("submitButton").disabled = true;
-        document.getElementById("submitButton").hidden = true;
-    }
-
     function donTShowTime() {
         document.getElementById("setTime").disabled = true;
         document.getElementById("setTime").hidden = true;
@@ -932,7 +754,7 @@
     }
 
     function offFunction() {
-        alert ("Your are offline. Some functionality may be unavailable.");
+        alert ("You are offline. Some functionality may be unavailable.");
     }
 
 
@@ -941,69 +763,14 @@
             url: 'stuff',
             type: 'GET',
             dataType: 'json',
-            async: false,
+            async: true,
             success: function (resp) {
                 if (resp.length > 0) {
-                    //console.log(resp);
+                    console.log(resp.length);
                     for (let i = 0; i < resp.length; i++) {
-                        //if (resp[i].username === req.user.username) {
-                        // if (resp[i].ContinentName = 'SA') {
-                        //     layer0continent = "South America";
-                        // } else if (resp[i].ContinentName = 'NA') {
-                        //     layer0continent = "North America";
-                        // } else if (resp[i].ContinentName = 'OC') {
-                        //     layer0continent = "Oceania";
-                        // } else if (resp[i].ContinentName = 'AF') {
-                        //     layer0continent = "Africa";
-                        // } else if (resp[i].ContinentName = 'AS') {
-                        //     layer0continent = "Asia";
-                        // } else if (resp[i].ContinentName = 'EU') {
-                        //     layer0continent = "Europe";
-                        // } else if (resp[i].ContinentName = 'AN') {
-                        //     layer0continent = "Antarctica";
-                        // } else {
-                        //     layer0continent = resp[i].ContinentName;
-                        // }
-                        //layer0continent
-                        // table.row.add([
-                        //     resp[i].Date,
-                        //     resp[i].UID,
-                        //     resp[i].RID,
-                        //     resp[i].LayerCategory,
-                        //     layer0continent,
-                        //     resp[i].CountryName,
-                        //     resp[i].StateName,
-                        //     resp[i].CityName,
-                        //     resp[i].FirstLayer,
-                        //     resp[i].FirstOther,
-                        //     resp[i].SecondLayer,
-                        //     resp[i].SecondOther,
-                        //     resp[i].ThirdLayer,
-                        //     resp[i].Layer_Description,
-                        //     resp[i].LayerFormat,
-                        //     resp[i].Layer_Uploader_name,
-                        //     resp[i].Current_Status
-                        // ]).draw(false);
-                        table.row.add([
-                            resp[i].username,
-                            resp[i].logDate,
-                            resp[i].inTime,
-                            resp[i].outTime,
-                            resp[i].timeLeft,
-                            resp[i].timeDiff,
-                            resp[i].method,
-                            // resp[i].StateName,
-                            // resp[i].CityName,
-                            // resp[i].FirstLayer,
-                            // resp[i].FirstOther,
-                            // resp[i].SecondLayer,
-                            // resp[i].SecondOther,
-                            // resp[i].ThirdLayer,
-                            // resp[i].Layer_Description,
-                            // resp[i].LayerFormat,
-                            // resp[i].Layer_Uploader_name,
-                            // resp[i].Current_Status
-                        ]).draw(false);
+                        var values = Object.values(resp[i])
+                        console.log(values);
+                        table.row.add(values).draw(false);
                         //}
                     }
                 } else {
@@ -1011,6 +778,49 @@
                 }
             }
         });
+    }
+    function checkRows() {
+        if (table.$('tr.selected').length === 1) {
+            console.log("go pro");
+            document.getElementById("editButton").disabled = false;
+            document.getElementById("editButton").style.color = "black";
+        } else {
+            console.log("no bueno");
+            document.getElementById("editButton").disabled = true;
+            document.getElementById("editButton").style.color = "gray";
+        }
+    }
+
+    function submitRows() {
+        if (table.$('tr.selected').length === 1) {
+            var selectedRow = []
+            var data = table.$('tr.selected')[0];
+            for (i = 0; i < 14; i++) {
+                selectedRow.push($(data).find('td').eq(i).text());
+            }
+            console.log(selectedRow);
+            window.location.href = "/editData?ID=" + selectedRow[0];
+        }
+    }
+
+    document.getElementById("dataDisplay").addEventListener("click", checkRows);
+    document.getElementById("editButton").addEventListener("click", submitRows);
+    document.getElementById("filterDate").addEventListener("click", queryDate);
+    document.getElementById("showAll").addEventListener("click", queryAllDisplay);
+    document.getElementById("buttontwo").addEventListener("click", exportTableToCSV);
+        }})
+
+    function showFilter(){
+        if(document.getElementById("from").value === '' || document.getElementById("to").value === '' || document.getElementById('firstName').value === '') {
+            donTShowFilter();
+        } else {
+            document.getElementById("submitButton").disabled = false;
+            document.getElementById("submitButton").hidden = false;
+        }
+    }
+    function donTShowFilter() {
+        document.getElementById("submitButton").disabled = true;
+        document.getElementById("submitButton").hidden = true;
     }
 </script>
 </body>

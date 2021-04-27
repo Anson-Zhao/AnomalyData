@@ -4,7 +4,7 @@
 
 const LocalStrategy   = require('passport-local').Strategy;
 const mysql = require('mysql');
-const config = require('../config/serverConfig');
+const config = require('../config/serverConfig0');
 const bcrypt = require('bcrypt-nodejs');
 const con_CS = mysql.createConnection(config.commondb_connection);
 
@@ -25,7 +25,7 @@ module.exports = function(passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        con_CS.query("SELECT * FROM userlogin WHERE id = ? ",[id], function(err, rows){
+        con_CS.query("SELECT * FROM UserLogin WHERE id = ? ",[id], function(err, rows){
             done(err, rows[0]);
         });
     });
@@ -87,7 +87,7 @@ module.exports = function(passport) {
                 passReqToCallback : true // allows us to pass back the entire request to the callback
             },
             function(req, username, password, done) { // callback with email and password from our form
-                con_CS.query("SELECT * FROM userlogin WHERE username = ?",[username], function(err, rows){
+                con_CS.query("SELECT * FROM UserLogin WHERE username = ?",[username], function(err, rows){
                     if (err)
                         return done(err);
                     if (!rows.length) {

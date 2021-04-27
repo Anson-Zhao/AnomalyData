@@ -1,5 +1,5 @@
 // config/database.js
-let serverConfig = {
+let serverConfig0 = {
     commondb_connection: {
         'multipleStatements': true,
         'connectionLimit' : 100,
@@ -19,11 +19,10 @@ let serverConfig = {
         'port'    :  3306
     },
 
-    Session_db: 'ESP2',
-    Login_db: 'ESP2',
+    Session_db: 'CitySmart2',
+    Login_db: 'CitySmart2',
     Login_table: 'UserLogin',
-    Upload_db: 'ESP2',
-    Query_db: 'ESP2',
+    Upload_db: 'CitySmart2',
 
     Server_Port: 9088,
 
@@ -58,4 +57,4 @@ let serverConfig = {
 
 };
 
-module.exports = serverConfig;
+module.exports = serverConfig0;

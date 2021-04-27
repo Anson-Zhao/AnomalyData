@@ -154,15 +154,15 @@
     <a class="navul" style="background:#000000;" href="http://aworldbridge.com">
         <img class="banner" src="/images/NewWBBanner.jpg" style="width: 500px;height:76px;"/>
     </a>
-<!--    <a href="/homepageLI" style="width:110px;">-->
-<!--        <button class="navbutton1"> Homepage </button>-->
-<!--    </a>-->
-<!--    <a href="/newRequest" id= "Request" style="width:110px;">-->
-<!--        <button class="navbutton1" style="width: 140px"> New Request </button>-->
-<!--    </a>-->
-<!--    <a href="/recovery" id ="Restore" style="width:50px;">-->
-<!--        <button class="navbutton1"> Restore </button>-->
-<!--    </a>-->
+    <!--    <a href="/homepageLI" style="width:110px;">-->
+    <!--        <button class="navbutton1"> Homepage </button>-->
+    <!--    </a>-->
+    <!--    <a href="/newRequest" id= "Request" style="width:110px;">-->
+    <!--        <button class="navbutton1" style="width: 140px"> New Request </button>-->
+    <!--    </a>-->
+    <!--    <a href="/recovery" id ="Restore" style="width:50px;">-->
+    <!--        <button class="navbutton1"> Restore </button>-->
+    <!--    </a>-->
     <a href="/dataHistory" style="width:110px;">
         <button class="navbutton1" style="width: 160px"> Data History </button>
     </a>
@@ -189,10 +189,10 @@
 
 <div class="container center">
     <div class="page-header text-center header">
-        <h1><span class="fa fa-home"></span><strong> User Home </strong></h1><h4><span class="fa fa-user"></span>
+        <h1><span class="fa fa-gamepad"></span><strong> Data Editor - Edit Anomaly Data </strong></h1><h4><span class="fa fa-user"></span>
             <strong>Account Name</strong>: <%= user.username %></h4>
-                <strong id = 'Left'>Minutes Still Needed</strong><br>
-                <strong id = 'total'>Total Time Left</strong>
+        <strong id = 'Left'>Minutes Still Needed</strong><br>
+        <strong id = 'total'>Total Time Left</strong>
 
     </div>
 </div>
@@ -200,8 +200,11 @@
 
 <div class="container" style="width: 900px;">
     <div class="center floating-Box clearForm" style="width: 690px;">
-        <h2 class="floating-Box"><strong>Submit anomaly data:</strong></h2>
+        <h4 class="floating-Box"><strong>What ID row do you want to edit?</strong></h4>
+        <input id="ID" type="number">
+
         <br><br>
+
         <h4 class="floating-Box"><strong>What date did this event happen?</strong></h4>
         <input class="date floating-Box" id="date" type="text" placeholder="Select Date" style="width: 280px;
     height: 40px;
@@ -209,6 +212,7 @@
     margin: 5px 5px 5px 0px;
     border-radius: 5px;
     border: 1px solid #c8c8c8;">
+
         <br><br>
 
         <h4 class="floating-Box"><strong>When did it start and when did it end?</strong></h4>
@@ -240,15 +244,55 @@
 
         <br><br>
 
-        <button id = "submit" style="width: 160px"> Submit </button>
-        <!--<button id = "timeIn" style="width: 160px"> Log Start Time </button>
-        <button id = "timeOut" style="width: 160px"> Log End Time </button>--><br><br>
+        <h4 class="floating-Box"><strong>Was this event a true positive?</strong></h4>
+        <input id="truePositive" type="checkbox">
+
+        <br><br>
+
+        <div id="myDIV">
+            <h4 class="floating-Box"><strong>When did the earthquake happen?</strong></h4>
+            <input class="date floating-Box" id="eventDate" type="text" placeholder="Select Date" style="width: 280px;
+        height: 40px;
+        padding-left: 10px;
+        margin: 5px 5px 5px 0px;
+        border-radius: 5px;
+        border: 1px solid #c8c8c8;">
+
+            <br><br>
+
+            <h4 class="floating-Box"><strong>When did it start?</strong></h4>
+            <input id="eventTime" style="
+        height: 40px;
+        padding-left: 10px;
+        margin: 5px 5px 5px 0px;
+        border-radius: 5px;
+        border: 1px solid #c8c8c8;" type="time">
+
+            <br><br>
+
+            <h4 class="floating-Box"><strong>Where did it happen?</strong></h4>
+            <input id="eventLocation" type="text">
+
+            <br><br>
+
+            <h4 class="floating-Box"><strong>What is the latitude and longitude?</strong></h4>
+            <input id="eventLat" type="number"><span>, </span><input id="eventLong" type="number">
+
+            <br><br>
+
+            <h4 class="floating-Box"><strong>Link to event data:</strong></h4>
+            <input id="URL" type="url">
+        </div>
+
+        <br><br>
+            <button id = "submit" style="width: 160px"> Submit </button>
+            <br><br>
+        </div>
     </div>
-</div>
-<br>
-<br>
-</div>
     <br>
+    <br>
+</div>
+<br>
 <!--</div>-->
 <script type='text/javascript'>
     let firstName = "<%= firstName %>";
@@ -268,11 +312,29 @@
     let displayHour;
     let displayMinute;
     let displaySecond;
+    let ID = '<%= ID %>';
+    let x = document.getElementById("myDIV");
+    console.log('<%= selectedRow %>');
     // let adminButton = document.getElementById('edit');
     // let addButton = document.getElementById('add');
     // let removeButton = document.getElementById('remove');
 
 
+    document.getElementById("ID").value = '<%= ID %>';
+    document.getElementById("date").value = '<%= selectedRow[0] %>';
+    document.getElementById("startTime").value = '<%= selectedRow[1] %>';
+    document.getElementById("endTime").value = '<%= selectedRow[2] %>';
+    document.getElementById("spikeSize").value = '<%= selectedRow[3] %>';
+    //document.getElementById("stations").value;
+    document.getElementById("truePositive").checked = '<%= selectedRow[5] %>' === "true";
+    console.log(document.getElementById("truePositive").checked);
+    console.log('<%= selectedRow[5] %>');
+    document.getElementById("eventDate").value = '<%= selectedRow[6] %>';
+    document.getElementById("eventTime").value = '<%= selectedRow[7] %>';
+    document.getElementById("eventLocation").value = '<%= selectedRow[8] %>';
+    document.getElementById("eventLat").value = '<%= selectedRow[9] %>';
+    document.getElementById("eventLong").value = '<%= selectedRow[10] %>';
+    document.getElementById("URL").value = '<%= selectedRow[11] %>';
 
     $(document).ready(function() {
 
@@ -325,6 +387,56 @@
         })
     });
 
+    var onCheckboxClick = function() {
+        var stationBoxes = document.getElementsByClassName("checkbox"),
+            stationValues = [],
+            i,
+            j;
+
+        for (j = 0; j < stationBoxes.length; j++) {
+            stationValues.push(stationBoxes[j].checked);
+        }
+
+        var stationNumber = 0;
+        for(i = 0; i < stationValues.length; i++){
+            if (stationValues[i] === true)
+                stationNumber++;
+        }
+        console.log(stationNumber);
+    };
+
+    $.ajax({
+        url: '/getboxes',
+        method: 'get',
+        success: function (response) {
+            var inputs = document.getElementById("stationInputs");
+            var stations = response;
+            var jameser = '<%= stationValues %>'.split(",");
+            var i;
+            console.log(jameser);
+
+            for (i = 0; i < stations.length; i++) {
+                console.log(stations[i]);
+                var stationinput = document.createElement("h5");
+                var strong = document.createElement("strong");
+                stationinput.className = "floating-box";
+                strong.textContent = stations[i];
+                stationinput.appendChild(strong);
+                inputs.appendChild(stationinput);
+
+                var stationcheckbox = document.createElement("input");
+                stationcheckbox.type = "checkbox";
+                stationcheckbox.className = "checkbox";
+                inputs.appendChild(stationcheckbox);
+
+                var checktheboxes = document.getElementsByClassName("checkbox");
+                checktheboxes[i].addEventListener('click', onCheckboxClick, false);
+                checktheboxes[i].checked = (jameser[i] === 'true');
+                console.log(jameser[i]);
+            }
+        }
+    })
+
     function dropDown() {
         //console.log(UserRole);
         if (UserRole === "Admin") {
@@ -353,58 +465,36 @@
         alert ("You are offline. Some functionality may be unavailable.");
     }
 
-    var onCheckboxClick = function() {
-        var stationBoxes = document.getElementsByClassName("checkbox"),
-            stationValues = [],
-            i,
-            j;
+    var truePositive = document.getElementById("truePositive").checked;
 
-        for (j = 0; j < stationBoxes.length; j++) {
-            stationValues.push(stationBoxes[j].checked);
-        }
+    if (truePositive === true) {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
 
-        var stationNumber = 0;
-        for(i = 0; i < stationValues.length; i++){
-            if (stationValues[i] === true)
-                stationNumber++;
+    checkbox = function () {
+        truePositive = !truePositive;
+        if (truePositive === true) {
+            x.style.display = "block";
+        } else {
+            x.style.display = "none";
         }
-        console.log(stationNumber);
     };
-
-    $.ajax({
-        url: '/getboxes',
-        method: 'get',
-        success: function (response) {
-            var inputs = document.getElementById("stationInputs");
-            var stations = response;
-            var i;
-            for (i = 0; i < stations.length; i++) {
-                console.log(stations[i]);
-                var stationinput = document.createElement("h5");
-                var strong = document.createElement("strong");
-                stationinput.className = "floating-box";
-                strong.textContent = stations[i];
-                stationinput.appendChild(strong);
-                inputs.appendChild(stationinput);
-
-                var stationcheckbox = document.createElement("input");
-                stationcheckbox.type = "checkbox";
-                stationcheckbox.className = "checkbox";
-                inputs.appendChild(stationcheckbox);
-
-                var checktheboxes = document.getElementsByClassName("checkbox")
-                for (var k = 0; k < checktheboxes.length; k++) {
-                    checktheboxes[i].addEventListener('click', onCheckboxClick, false);
-                }
-            }
-        }
-    })
+    document.getElementById("truePositive").addEventListener("click", checkbox)
 
     var onSubmitButton = function() {
-        var date = document.getElementById("date").value,
+        var id = document.getElementById("ID").value,
+            date = document.getElementById("date").value,
             startTime = document.getElementById("startTime").value,
             endTime = document.getElementById("endTime").value,
             spikeSize = document.getElementById("spikeSize").value,
+            eventDate = document.getElementById("eventDate").value,
+            eventTime = document.getElementById("eventTime").value,
+            eventLocation = document.getElementById("eventLocation").value,
+            eventLat = document.getElementById("eventLat").value,
+            eventLong = document.getElementById("eventLong").value,
+            url = document.getElementById("URL").value,
             stationNumber = 0,
             stationBoxes = document.getElementsByClassName("checkbox"),
             stationValues = [],
@@ -419,21 +509,29 @@
             if (stationValues[i] === true)
                 stationNumber++;
         }
+        console.log(truePositive);
         console.log(date);
 
         $.ajax({
-            url: '/abc',
+            url: '/defg',
             method: 'get',
             data: {
+                id: id,
                 date: date,
                 startTime: startTime,
                 endTime: endTime,
                 spikeSize: spikeSize,
                 stationNumber: stationNumber,
                 stationValues: stationValues,
+                truePositive: truePositive,
+                eventDate: eventDate,
+                eventTime: eventTime,
+                eventLocation: eventLocation,
+                eventLat: eventLat,
+                eventLong: eventLong,
+                url: url,
             },
             success: function () {
-                console.log("pwn'd");
                 window.location.href = '/dataHistory';
             }
         })
