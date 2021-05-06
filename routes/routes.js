@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 // const cors = require('cors');
 const async = require('async');
 const crypto = require('crypto');
+const text = require('textbelt');
 const con_CS = mysql.createConnection(serverConfig.commondb_connection);
 const smtpTrans = nodemailer.createTransport({
     service: 'Gmail',
@@ -120,15 +121,19 @@ module.exports = function (app, passport) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
         let statement = "SELECT * FROM UserLogin WHERE username = '" + req.user.username + "';";
 
-        let password = generator.generateMultiple(1, {
-            length: 8,
-            uppercase: true,
-            excludeSimilarCharacters: true,
-            numbers: true,
-            symbols:false
-        });
+        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+            password = "",
+            rng;
 
-        password = password.toString().toUpperCase();
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+        for (let i = 0; i < 8; i++) {
+            rng = characters[getRandomInt(characters.length)];
+            password = password + rng;
+            characters = characters.replace(rng, "");
+        }
+        console.log(password);
 
         con_CS.query(statement, function (err, results, fields) {
             if (err) {
@@ -215,13 +220,19 @@ module.exports = function (app, passport) {
         console.log('The code was successfully generated');
         console.log(result[0]);
 
-        let password = generator.generateMultiple(1, {
-            length: 8,
-            uppercase: true,
-            excludeSimilarCharacters: true,
-            numbers: true,
-            symbols: false,
-        });
+        var characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+            password = "",
+            rng;
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
+        }
+        for (let i = 0; i < 8; i++) {
+            rng = characters[getRandomInt(characters.length)];
+            password = password + rng;
+            characters = characters.replace(rng, "");
+        }
+        console.log(password);
 
         password = password.toString().toUpperCase();
 
@@ -229,11 +240,11 @@ module.exports = function (app, passport) {
         console.log(password);
         console.log(req.user.Phone_Number);
 
-        text.sendText(result[0], " Your verification code:   " + password + "   will be valid for 3 minutes. Please enter the code into the provided field.", undefined, function(err) {
+        text.sendText(req.user.Phone_Number, "Your verification code:   " + password + "   will be valid for 3 minutes. Please enter the code into the provided field.", undefined, function(err) {
             if (err) {
                 console.log(err);
                 res.send("An error has occurred.");
-            } else{
+            } else {
                 res.render('PhoneAuthP2.ejs', {
                     user: req.user,
                     Code: password,
@@ -241,7 +252,6 @@ module.exports = function (app, passport) {
                 });
             }
         });
-
     });
 
     app.get('/reset/:token', function (req, res) {
@@ -1835,8 +1845,8 @@ module.exports = function (app, passport) {
                     //     url + token + '\n\n' +
                     //     'If you did not request this, please ignore this email.\n'
                     html: 'You are receiving this because you (or someone else) have requested ' + text + '\n\n' +
-                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        '<p><a href="' + url + token + '" >'+ url + token + '</a></p>' + '\n\n' +
+                        'Please paste this into your browser to complete the process:\n\n' +
+                        '<p>' + url + '</p>' + '\n\n' +
                         'If you did not request this, please ignore this email.\n'
                 };
 
@@ -1875,8 +1885,8 @@ module.exports = function (app, passport) {
                     //     url +'\n\n' +
                     //     'If you did not request this, please ignore this email.\n'
                     html: 'You are receiving this because you (or someone else) have requested ' + text + '\n\n' +
-                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        '<p><a href="' + url + token + '" >'+ url + token + '</a></p>' + '\n\n' +
+                        'Please paste this into your browser to complete the process:\n\n' +
+                        '<p>' + url + '</p>' + '\n\n' +
                         'If you did not request this, please ignore this email.\n'
 
                 };
@@ -1930,8 +1940,8 @@ module.exports = function (app, passport) {
                     subject: subject, // Subject of the message
                     // plaintext body
                     html: 'You are receiving this because you (or someone else) have requested ' + text + '\n\n' +
-                        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-                        '<p><a href="' + url + token + '" >'+ url + token + '</a></p>' + '\n\n' +
+                        'Please paste this into your browser to complete the process:\n\n' +
+                        '<p>' + url + '</p>' + '\n\n' +
                         'If you did not request this, please ignore this email.\n'
                 };
 
