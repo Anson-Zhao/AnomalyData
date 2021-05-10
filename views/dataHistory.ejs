@@ -671,7 +671,7 @@
             function exportTableToCSV() {
                 let csv = [];
                 // let table = document.querySelector('#trapDisplay');
-                let rows = document.querySelector("#dataDisplay").querySelectorAll(".selected, thead");
+                let rows = document.querySelector("#dataDisplay").querySelectorAll("tr");
 
                 for (let i = 0; i < rows.length; i++) {
                     let row = [], cols = rows[i].querySelectorAll("td, th");
@@ -680,7 +680,9 @@
                         row.push(cols[j].innerText);
 
                     csv.push(row.join(","));
+                    console.log(row);
                 }
+                console.log(csv)
 
                 // Download CSV file
                 downloadCSV(csv.join("\n"), '<%= user.username %>.csv');
@@ -767,7 +769,6 @@
                             console.log(resp.length);
                             for (let i = 0; i < resp.length; i++) {
                                 var values = Object.values(resp[i])
-                                console.log(values);
                                 table.row.add(values).draw(false);
                                 //}
                             }
