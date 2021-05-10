@@ -680,9 +680,7 @@
                         row.push(cols[j].innerText);
 
                     csv.push(row.join(","));
-                    console.log(row);
                 }
-                console.log(csv)
 
                 // Download CSV file
                 downloadCSV(csv.join("\n"), '<%= user.username %>.csv');
