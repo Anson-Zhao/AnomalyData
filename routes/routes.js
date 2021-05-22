@@ -34,7 +34,44 @@ module.exports = function (app, passport) {
     // =====================================
     // CS APP Home Section =================
     // =====================================
-    con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function(err, result){
+
+    con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' ORDER BY ordinal_position;", function(err, result){
+        var resultTwo = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
+        con_CS.query("SELECT StationName FROM ESP2.stationdata;", function(err, result){
+            var resultOne = JSON.stringify(result).replace("[", "").replace("]", ""),
+                resultThree = resultOne;
+            console.log(resultOne);
+            console.log(resultTwo);
+            for (var i = 0; i < resultTwo.length; i++) {
+                resultThree = resultThree.replace(resultTwo[i], "");
+                resultThree = resultThree.replace(/{"StationName":""},/g, "");
+            }
+            var newStations = resultThree.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
+            console.log(newStations);
+
+            for (i = 0; i < newStations.length; i++) {
+                resultOne = resultOne.replace(newStations[i], "");
+                resultOne = resultOne.replace(/{"StationName":""},/g, "");
+                resultOne = resultOne.replace(/,{"StationName":""}/g, "");
+                console.log(resultOne);
+            }
+            resultOne = resultOne.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
+            console.log(resultOne);
+
+            for (var j = 0; j < newStations.length; j++) {
+                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
+                    var query = "ALTER TABLE ESP2.anomalies ADD COLUMN " + newStations[newStations.length - 1] + " VARCHAR(45) NULL AFTER " + resultOne[resultOne.length - 1] + ";"
+                    const index = newStations.indexOf(newStations[newStations.length - 1]);
+                    if (index > -1) {
+                        newStations.splice(index, 1);
+                    }
+                    console.log(query);
+                    con_CS.query(query, function (err, result) {})
+                })
+            }
+        })
+    })
+    /*con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function(err, result){
         var resultOne = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
         console.log(resultOne);
         con_CS.query("SELECT StationName FROM ESP2.stationdata;", function(err, result){
@@ -49,7 +86,7 @@ module.exports = function (app, passport) {
             console.log(newStations);
 
             for (var j = 0; j < newStations.length; j++) {
-                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function (err, result) {
+                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
                     var resultOne = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
                     var query = "ALTER TABLE ESP2.anomalies ADD COLUMN " + newStations[newStations.length - 1] + " VARCHAR(45) NULL AFTER " + resultOne[resultOne.length - 1] + ";"
                     const index = newStations.indexOf(newStations[newStations.length - 1]);
@@ -61,7 +98,7 @@ module.exports = function (app, passport) {
                 })
             }
         })
-    })
+    })*/
 
     app.get('/',function (req,res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
@@ -464,15 +501,15 @@ module.exports = function (app, passport) {
 
     //my new stuff here
     app.get('/getboxes', function (req, res) {
-        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function (err, result) {
-            var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
+        con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+            var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
             console.log(george);
             res.send(george);
         });
     })
 
     app.get('/getcolumns', function (req, res) {
-        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies';", function (err, result) {
+        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'anomalies' ORDER BY ordinal_position;", function (err, result) {
             var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
             console.log(george);
             res.send(george);
@@ -494,8 +531,8 @@ module.exports = function (app, passport) {
 
             con_CS.query("INSERT INTO ESP2.anomalies (ID, Date, StartTime, EndTime, GapValue, StationNumber) VALUES ('" + ID + "', '" + cool.date + "', '" + cool.startTime + "', '" + cool.endTime + "', '" + cool.spikeSize + "', '" + cool.stationNumber + "');", function (err, result) {
                 if (err) throw err;
-                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function (err, result) {
-                    var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
+                con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+                    var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
                         modified = false,
                         querySet = "";
 
@@ -562,8 +599,8 @@ module.exports = function (app, passport) {
         } /*else {
             res.send("amongst");
         }*/
-        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function (err, result) {
-            var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
+        con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+            var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
                 modified = false,
                 querySet = "";
 
@@ -1678,10 +1715,10 @@ module.exports = function (app, passport) {
                 // console.log("Yes");
                 // console.log(req.user);
                 con_CS.query("SELECT Date, StartTime, EndTime, GapValue, StationNumber, TruePositive, EventDate, EventTime, EventLocation, EventLatitude, EventLongitude, EventURL FROM ESP2.anomalies WHERE ID = '" + req.query.ID + "';", function (err, result) {
-                    var selectedRow = Object.values(result[0])
+                    var selectedRow = Object.values(result[0]);
                     console.log(selectedRow);
-                    con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%';", function (err, result) {
-                        var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
+                    con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+                        var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
                         george = JSON.stringify(george).replace(/",/g, ",").replace(/"/g, " ").replace("[ ", "").replace("]", "");
                         var stationfunction = "SELECT " + george + "FROM ESP2.anomalies WHERE ID = " + req.query.ID + ";";
                         con_CS.query(stationfunction, function (err, result) {
