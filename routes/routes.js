@@ -35,42 +35,6 @@ module.exports = function (app, passport) {
     // CS APP Home Section =================
     // =====================================
 
-    con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' ORDER BY ordinal_position;", function(err, result){
-        var resultTwo = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
-        con_CS.query("SELECT StationName FROM ESP2.stationdata;", function(err, result){
-            var resultOne = JSON.stringify(result).replace("[", "").replace("]", ""),
-                resultThree = resultOne;
-            console.log(resultOne);
-            console.log(resultTwo);
-            for (var i = 0; i < resultTwo.length; i++) {
-                resultThree = resultThree.replace(resultTwo[i], "");
-                resultThree = resultThree.replace(/{"StationName":""},/g, "");
-            }
-            var newStations = resultThree.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
-            console.log(newStations);
-
-            for (i = 0; i < newStations.length; i++) {
-                resultOne = resultOne.replace(newStations[i], "");
-                resultOne = resultOne.replace(/{"StationName":""},/g, "");
-                resultOne = resultOne.replace(/,{"StationName":""}/g, "");
-                console.log(resultOne);
-            }
-            resultOne = resultOne.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
-            console.log(resultOne);
-
-            for (var j = 0; j < newStations.length; j++) {
-                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
-                    var query = "ALTER TABLE ESP2.anomalies ADD COLUMN " + newStations[newStations.length - 1] + " VARCHAR(45) NULL AFTER " + resultOne[resultOne.length - 1] + ";"
-                    const index = newStations.indexOf(newStations[newStations.length - 1]);
-                    if (index > -1) {
-                        newStations.splice(index, 1);
-                    }
-                    console.log(query);
-                    con_CS.query(query, function (err, result) {})
-                })
-            }
-        })
-    })
     /*con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function(err, result){
         var resultOne = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
         console.log(resultOne);
@@ -2044,5 +2008,46 @@ module.exports = function (app, passport) {
                 res.render('success.ejs', {});
             }
         });
+    }
+
+    setTimeout(myFunction, 0);
+    function myFunction() {
+        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' ORDER BY ordinal_position;", function (err, result) {
+            var resultTwo = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
+            con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+                var resultOne = JSON.stringify(result).replace("[", "").replace("]", ""),
+                    resultThree = resultOne;
+
+                for (var i = 0; i < resultTwo.length; i++) {
+                    resultThree = resultThree.replace(resultTwo[i], "");
+                    resultThree = resultThree.replace(/{"StationName":""},/g, "");
+                }
+                var newStations = resultThree.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
+                console.log(newStations);
+
+                for (i = 0; i < newStations.length; i++) {
+                    resultOne = resultOne.replace(newStations[i], "");
+                    resultOne = resultOne.replace(/{"StationName":""},/g, "");
+                    resultOne = resultOne.replace(/,{"StationName":""}/g, "");
+                    console.log(resultOne);
+                }
+                resultOne = resultOne.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
+                console.log(resultOne);
+
+                for (var j = 0; j < newStations.length; j++) {
+                    con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
+                        var query = "ALTER TABLE ESP2.anomalies ADD COLUMN " + newStations[newStations.length - 1] + " VARCHAR(45) NULL AFTER " + resultOne[resultOne.length - 1] + ";"
+                        const index = newStations.indexOf(newStations[newStations.length - 1]);
+                        if (index > -1) {
+                            newStations.splice(index, 1);
+                        }
+                        console.log(query);
+                        con_CS.query(query, function (err, result) {
+                        })
+                    })
+                }
+            })
+        })
+        setTimeout(myFunction, 600000);
     }
 };
