@@ -202,7 +202,7 @@
     <div class="center floating-Box clearForm" style="width: 690px;">
         <h2 class="floating-Box"><strong>Submit anomaly data:</strong></h2>
         <br><br>
-        <h4 class="floating-Box"><strong>What date did this event happen?</strong></h4>
+        <h4 class="floating-Box"><strong>What date did this anomaly happen?</strong></h4>
         <input class="date floating-Box" id="date" type="text" placeholder="Select Date" style="width: 280px;
     height: 40px;
     padding-left: 10px;
@@ -226,7 +226,7 @@
 
         <br><br>
 
-        <h4 class="floating-Box"><strong>How big is the spike?</strong></h4>
+        <h4 class="floating-Box"><strong>What is the difference between the peak and the base?</strong></h4>
         <input id="spikeSize" type="number">
 
         <br><br>
@@ -354,21 +354,35 @@
     }
 
     var onCheckboxClick = function() {
-        var stationBoxes = document.getElementsByClassName("checkbox"),
-            stationValues = [],
-            i,
-            j;
+        document.getElementById("addStation").remove();
+        $.ajax({
+            url: '/getboxes',
+            method: 'get',
+            success: function (response) {
+                var inputs = document.getElementById("stationInputs");
+                var stations = response;
+                var i;
+                var stationfeild = document.createElement("p");
+                stationfeild.className = "stationField";
+                var select = document.createElement("select");
+                select.className = "select";
 
-        for (j = 0; j < stationBoxes.length; j++) {
-            stationValues.push(stationBoxes[j].checked);
-        }
-
-        var stationNumber = 0;
-        for(i = 0; i < stationValues.length; i++){
-            if (stationValues[i] === true)
-                stationNumber++;
-        }
-        console.log(stationNumber);
+                for (i = 0; i < stations.length; i++) {
+                    var option = document.createElement("option");
+                    option.textContent = stations[i];
+                    select.appendChild(option);
+                }
+                stationfeild.appendChild(select);
+                if (document.getElementsByClassName("stationField").length !== document.getElementsByClassName("bruh").length - 1) {
+                    var addStation = document.createElement("button");
+                    addStation.innerText = "Add station";
+                    addStation.id = "addStation";
+                    addStation.addEventListener('click', onCheckboxClick, false);
+                    stationfeild.appendChild(addStation);
+                }
+                inputs.appendChild(stationfeild);
+            }
+        })
     };
 
     $.ajax({
@@ -378,25 +392,24 @@
             var inputs = document.getElementById("stationInputs");
             var stations = response;
             var i;
+            var stationfeild = document.createElement("p");
+            stationfeild.className = "stationField";
+            var select = document.createElement("select");
+            select.className = "select";
             for (i = 0; i < stations.length; i++) {
                 console.log(stations[i]);
-                var stationinput = document.createElement("h5");
-                var strong = document.createElement("strong");
-                stationinput.className = "floating-box";
-                strong.textContent = stations[i];
-                stationinput.appendChild(strong);
-                inputs.appendChild(stationinput);
-
-                var stationcheckbox = document.createElement("input");
-                stationcheckbox.type = "checkbox";
-                stationcheckbox.className = "checkbox";
-                inputs.appendChild(stationcheckbox);
-
-                var checktheboxes = document.getElementsByClassName("checkbox")
-                for (var k = 0; k < checktheboxes.length; k++) {
-                    checktheboxes[i].addEventListener('click', onCheckboxClick, false);
-                }
+                var option = document.createElement("option");
+                option.textContent = stations[i];
+                option.className = "bruh";
+                select.appendChild(option);
             }
+            stationfeild.appendChild(select);
+            var addStation = document.createElement("button");
+            addStation.innerText = "Add station";
+            addStation.id = "addStation";
+            addStation.addEventListener('click', onCheckboxClick, false);
+            stationfeild.appendChild(addStation);
+            inputs.appendChild(stationfeild);
         }
     })
 
@@ -406,16 +419,33 @@
             endTime = document.getElementById("endTime").value,
             spikeSize = document.getElementById("spikeSize").value,
             stationNumber = 0,
-            stationBoxes = document.getElementsByClassName("checkbox"),
+            bruh = document.getElementsByClassName("bruh"),
+            stationNames = [],
+            selectedstuff = [],
             stationValues = [],
-            i,
-            j;
+            thenum;
 
-        for (j = 0; j < stationBoxes.length; j++) {
-            stationValues.push(stationBoxes[j].checked);
+        for (var k = 0; k < bruh.length; k++) {
+            stationNames.push(document.getElementsByClassName("bruh")[k].textContent)
+        }
+        console.log(stationNames);
+
+        for (var j = 0; j < document.getElementsByClassName("select").length; j++) {
+            selectedstuff.push(document.getElementsByClassName("select")[j].value);
+        }
+        console.log(selectedstuff);
+
+        for (var l = 0; l < stationNames.length; l++) {
+            stationValues.push("false");
         }
 
-        for(i = 0; i < stationValues.length; i++){
+        for (l = 0; l < selectedstuff.length; l++) {
+            thenum = stationNames.indexOf(selectedstuff[l]);
+            stationValues[thenum] = "true";
+        }
+        console.log(stationValues);
+
+        for(var i = 0; i < stationValues.length; i++){
             if (stationValues[i] === true)
                 stationNumber++;
         }

@@ -205,7 +205,7 @@
 
         <br><br>
 
-        <h4 class="floating-Box"><strong>What date did this event happen?</strong></h4>
+        <h4 class="floating-Box"><strong>What date did this anomaly happen?</strong></h4>
         <input class="date floating-Box" id="date" type="text" placeholder="Select Date" style="width: 280px;
     height: 40px;
     padding-left: 10px;
@@ -230,7 +230,7 @@
 
         <br><br>
 
-        <h4 class="floating-Box"><strong>How big is the spike?</strong></h4>
+        <h4 class="floating-Box"><strong>What is the difference between the peak and the base?</strong></h4>
         <input id="spikeSize" type="number">
 
         <br><br>
@@ -318,8 +318,6 @@
     // let adminButton = document.getElementById('edit');
     // let addButton = document.getElementById('add');
     // let removeButton = document.getElementById('remove');
-
-
     document.getElementById("ID").value = '<%= ID %>';
     document.getElementById("date").value = '<%= selectedRow[0] %>';
     document.getElementById("startTime").value = '<%= selectedRow[1] %>';
@@ -387,25 +385,90 @@
         })
     });
 
+
+
+
+
     var onCheckboxClick = function() {
-        var stationBoxes = document.getElementsByClassName("checkbox"),
-            stationValues = [],
-            i,
-            j;
+        document.getElementById("addStation").remove();
+        $.ajax({
+            url: '/getboxes',
+            method: 'get',
+            success: function (response) {
+                var inputs = document.getElementById("stationInputs");
+                var stations = response;
+                var i;
+                var stationfeild = document.createElement("p");
+                stationfeild.className = "stationField";
+                var select = document.createElement("select");
+                select.className = "select";
 
-        for (j = 0; j < stationBoxes.length; j++) {
-            stationValues.push(stationBoxes[j].checked);
-        }
-
-        var stationNumber = 0;
-        for(i = 0; i < stationValues.length; i++){
-            if (stationValues[i] === true)
-                stationNumber++;
-        }
-        console.log(stationNumber);
+                for (i = 0; i < stations.length; i++) {
+                    var option = document.createElement("option");
+                    option.textContent = stations[i];
+                    select.appendChild(option);
+                }
+                stationfeild.appendChild(select);
+                if (document.getElementsByClassName("stationField").length !== document.getElementsByClassName("bruh").length - 1) {
+                    var addStation = document.createElement("button");
+                    addStation.innerText = "Add station";
+                    addStation.id = "addStation";
+                    addStation.addEventListener('click', onCheckboxClick, false);
+                    stationfeild.appendChild(addStation);
+                }
+                inputs.appendChild(stationfeild);
+            }
+        })
     };
 
+
+
     $.ajax({
+        url: '/getboxes',
+        method: 'get',
+        success: function (response) {
+            var inputs = document.getElementById("stationInputs"),
+                stations = response,
+                thenum,
+                jameser = '<%= stationValues %>'.split(","),
+                trueCounter = JSON.stringify(jameser).split("true");
+
+            for (var j = 0; j < trueCounter.length - 1; j++) {
+                var stationfeild = document.createElement("p"),
+                    select = document.createElement("select");
+                stationfeild.className = "stationField";
+
+                thenum = jameser.indexOf("true");
+                jameser[thenum] = false;
+                console.log(thenum);
+
+                select.className = "select";
+                for (var i = 0; i < stations.length; i++) {
+                    console.log(stations[i]);
+                    var option = document.createElement("option");
+                    option.textContent = stations[i];
+                    if (j === 0) {
+                        option.className = "bruh";
+                    }
+                    if (i === thenum) {
+                        option.selected = "selected";
+                    }
+                    select.appendChild(option);
+                }
+                stationfeild.appendChild(select);
+                if (j === trueCounter.length - 2 && j !== 4) {
+                    var addStation = document.createElement("button");
+                    addStation.innerText = "Add station";
+                    addStation.id = "addStation";
+                    addStation.addEventListener('click', onCheckboxClick, false);
+                    stationfeild.appendChild(addStation);
+                }
+                inputs.appendChild(stationfeild);
+            }
+        }
+    })
+
+    /*$.ajax({
         url: '/getboxes',
         method: 'get',
         success: function (response) {
@@ -435,7 +498,7 @@
                 console.log(jameser[i]);
             }
         }
-    })
+    })*/
 
     function dropDown() {
         //console.log(UserRole);
@@ -496,20 +559,36 @@
             eventLong = document.getElementById("eventLong").value,
             url = document.getElementById("URL").value,
             stationNumber = 0,
-            stationBoxes = document.getElementsByClassName("checkbox"),
+            bruh = document.getElementsByClassName("bruh"),
+            stationNames = [],
+            selectedstuff = [],
             stationValues = [],
-            i,
-            j;
+            thenum;
 
-        for (j = 0; j < stationBoxes.length; j++) {
-            stationValues.push(stationBoxes[j].checked);
+        for (var k = 0; k < bruh.length; k++) {
+            stationNames.push(document.getElementsByClassName("bruh")[k].textContent)
+        }
+        console.log(stationNames);
+
+        for (var j = 0; j < document.getElementsByClassName("select").length; j++) {
+            selectedstuff.push(document.getElementsByClassName("select")[j].value);
+        }
+        console.log(selectedstuff);
+
+        for (var l = 0; l < stationNames.length; l++) {
+            stationValues.push("false");
         }
 
-        for(i = 0; i < stationValues.length; i++){
+        for (l = 0; l < selectedstuff.length; l++) {
+            thenum = stationNames.indexOf(selectedstuff[l]);
+            stationValues[thenum] = "true";
+        }
+        console.log(stationValues);
+
+        for(var i = 0; i < stationValues.length; i++){
             if (stationValues[i] === true)
                 stationNumber++;
         }
-        console.log(truePositive);
         console.log(date);
 
         $.ajax({
