@@ -154,17 +154,17 @@
     <a class="navul" style="background:#000000;" href="http://aworldbridge.com">
         <img class="banner" src="/images/NewWBBanner.jpg" style="width: 500px;height:76px;"/>
     </a>
-<!--    <a href="/homepageLI" style="width:110px;">-->
-<!--        <button class="navbutton1"> Homepage </button>-->
-<!--    </a>-->
-<!--    <a href="/newRequest" id= "Request" style="width:110px;">-->
-<!--        <button class="navbutton1" style="width: 140px"> New Request </button>-->
-<!--    </a>-->
-<!--    <a href="/recovery" id ="Restore" style="width:50px;">-->
-<!--        <button class="navbutton1"> Restore </button>-->
-<!--    </a>-->
-    <a href="/dataHistory" style="width:110px;">
-        <button class="navbutton1" style="width: 160px"> Data History </button>
+    <!--    <a href="/homepageLI" style="width:110px;">-->
+    <!--        <button class="navbutton1"> Homepage </button>-->
+    <!--    </a>-->
+    <!--    <a href="/newRequest" id= "Request" style="width:110px;">-->
+    <!--        <button class="navbutton1" style="width: 140px"> New Request </button>-->
+    <!--    </a>-->
+    <!--    <a href="/recovery" id ="Restore" style="width:50px;">-->
+    <!--        <button class="navbutton1"> Restore </button>-->
+    <!--    </a>-->
+    <a href="/stationData" style="width:110px;">
+        <button class="navbutton1" style="width: 160px"> Station Data </button>
     </a>
     <a href="/rejected" style="width:110px;">
         <button class="navbutton1" style="width: 160px; display: none"> Rejected Requests </button>
@@ -189,70 +189,84 @@
 
 <div class="container center">
     <div class="page-header text-center header">
-        <h1><span class="fa fa-home"></span><strong> User Home </strong></h1><h4><span class="fa fa-user"></span>
+        <h1><span class="fa fa-gamepad"></span><strong> Data Editor - Edit Anomaly Data </strong></h1><h4><span class="fa fa-user"></span>
             <strong>Account Name</strong>: <%= user.username %></h4>
-                <strong id = 'Left'>Minutes Still Needed</strong><br>
-                <strong id = 'total'>Total Time Left</strong>
+        <strong id = 'Left'>Minutes Still Needed</strong><br>
+        <strong id = 'total'>Total Time Left</strong>
 
     </div>
 </div>
 <br>
 
-<div class="container" style="width: 900px; text-align: center">
-    <a href="/addStation" style = "color: black">
-        <button> Station submitter </button>
-    </a>
-    <br>
-    <div class="center floating-Box clearForm" style="width: 690px; text-align: left">
-        <h2 class="floating-Box"><strong>Submit anomaly data:</strong></h2>
-        <br><br>
-        <h4 class="floating-Box"><strong>What date did this anomaly happen?</strong></h4>
-        <input class="date floating-Box" id="date" type="text" placeholder="Select Date" style="width: 280px;
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;">
-        <br><br>
-
-        <h4 class="floating-Box"><strong>When did it start and when did it end?</strong></h4>
-        <input id="startTime" style="
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" type="time"> to <input id="endTime" style="
-    height: 40px;
-    padding-left: 10px;
-    margin: 5px 5px 5px 0px;
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;" type="time">
+<div class="container" style="width: 900px;">
+    <div class="center floating-Box clearForm" style="width: 690px;">
+        <h4 class="floating-Box"><strong>What PK row do you want to edit?</strong></h4>
+        <input id="PK" type="number">
 
         <br><br>
 
-        <h4 class="floating-Box"><strong>What is the difference between the peak and the base?</strong></h4>
-        <input id="spikeSize" type="number">
+        <h4 class="floating-Box"><strong>What should this station be named? (No spaces)</strong></h4>
+        <input id="name" type="text">
 
         <br><br>
 
-        <div id="stationDiv">
-            <h4 class="floating-Box"><strong>What stations did this happen at?</strong></h4>
-            <div id="stationInputs">
+        <h4 class="floating-Box"><strong>Which continent is it in?</strong></h4>
+        <input id="continent" type="text">
 
-            </div>
+        <br><br>
+
+        <h4 class="floating-Box"><strong>Which city is it in?</strong></h4>
+        <input id="city" type="text">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>Which state is it in?</strong></h4>
+        <input id="state" type="text">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>Which country is it in?</strong></h4>
+        <input id="country" type="text">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>What is the latitude and longitude?</strong></h4>
+        <input id="lat" type="number"><span>, </span><input id="long" type="number">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>What is the altitude of the station?</strong></h4>
+        <input id="altitude" type="number">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>When was this station made?</strong></h4>
+        <input type="datetime-local" id="date">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>Is it still active?</strong></h4>
+        <input id="status" type="checkbox">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>Give a brief description:</strong></h4>
+        <input id="desc" type="text">
+
+        <br><br>
+
+        <h4 class="floating-Box"><strong>What is the station ID?</strong></h4>
+        <input id="id" type="text">
+
+        <br><br>
+            <button id = "submit" style="width: 160px"> Submit </button>
+            <br><br>
         </div>
-
-        <br><br>
-
-        <button id = "submit" style="width: 160px"> Submit </button>
-        <!--<button id = "timeIn" style="width: 160px"> Log Start Time </button>
-        <button id = "timeOut" style="width: 160px"> Log End Time </button>--><br><br>
     </div>
-</div>
-<br>
-<br>
-</div>
     <br>
+    <br>
+</div>
+<br>
 <!--</div>-->
 <script type='text/javascript'>
     let firstName = "<%= firstName %>";
@@ -272,11 +286,24 @@
     let displayHour;
     let displayMinute;
     let displaySecond;
+    let ID = '<%= ID %>';
+    console.log('<%= selectedRow %>');
     // let adminButton = document.getElementById('edit');
     // let addButton = document.getElementById('add');
     // let removeButton = document.getElementById('remove');
-
-
+    document.getElementById("PK").value = '<%= ID %>';
+    document.getElementById("name").value = '<%= selectedRow[0] %>';
+    document.getElementById("continent").value = '<%= selectedRow[1] %>';
+    document.getElementById("city").value = '<%= selectedRow[2] %>';
+    document.getElementById("state").value = '<%= selectedRow[3] %>';
+    document.getElementById("country").value = '<%= selectedRow[4] %>';
+    document.getElementById("lat").value = '<%= selectedRow[5] %>';
+    document.getElementById("long").value = '<%= selectedRow[6] %>';
+    document.getElementById("altitude").value = '<%= selectedRow[7] %>';
+    document.getElementById("date").value = '<%= selectedRow[8] %>'.replace(" ", "T");
+    document.getElementById("status").checked = ('<%= selectedRow[9] %>' === "Active")
+    document.getElementById("desc").value = '<%= selectedRow[10] %>';
+    document.getElementById("id").value = '<%= selectedRow[11] %>';
 
     $(document).ready(function() {
 
@@ -357,118 +384,51 @@
         alert ("You are offline. Some functionality may be unavailable.");
     }
 
-    var onCheckboxClick = function() {
-        document.getElementById("addStation").remove();
-        $.ajax({
-            url: '/getboxes',
-            method: 'get',
-            success: function (response) {
-                var inputs = document.getElementById("stationInputs");
-                var stations = response;
-                var i;
-                var stationfeild = document.createElement("p");
-                stationfeild.className = "stationField";
-                var select = document.createElement("select");
-                select.className = "select";
-
-                for (i = 0; i < stations.length; i++) {
-                    var option = document.createElement("option");
-                    option.textContent = stations[i];
-                    select.appendChild(option);
-                }
-                stationfeild.appendChild(select);
-                if (document.getElementsByClassName("stationField").length !== document.getElementsByClassName("bruh").length - 1) {
-                    var addStation = document.createElement("button");
-                    addStation.innerText = "Add station";
-                    addStation.id = "addStation";
-                    addStation.addEventListener('click', onCheckboxClick, false);
-                    stationfeild.appendChild(addStation);
-                }
-                inputs.appendChild(stationfeild);
-            }
-        })
-    };
-
-    $.ajax({
-        url: '/getboxes',
-        method: 'get',
-        success: function (response) {
-            var inputs = document.getElementById("stationInputs");
-            var stations = response;
-            var i;
-            var stationfeild = document.createElement("p");
-            stationfeild.className = "stationField";
-            var select = document.createElement("select");
-            select.className = "select";
-            for (i = 0; i < stations.length; i++) {
-                console.log(stations[i]);
-                var option = document.createElement("option");
-                option.textContent = stations[i];
-                option.className = "bruh";
-                select.appendChild(option);
-            }
-            stationfeild.appendChild(select);
-            var addStation = document.createElement("button");
-            addStation.innerText = "Add station";
-            addStation.id = "addStation";
-            addStation.addEventListener('click', onCheckboxClick, false);
-            stationfeild.appendChild(addStation);
-            inputs.appendChild(stationfeild);
-        }
-    })
 
     var onSubmitButton = function() {
-        var date = document.getElementById("date").value,
-            startTime = document.getElementById("startTime").value,
-            endTime = document.getElementById("endTime").value,
-            spikeSize = document.getElementById("spikeSize").value,
-            stationNumber = 0,
-            bruh = document.getElementsByClassName("bruh"),
-            stationNames = [],
-            selectedstuff = [],
-            stationValues = [],
-            thenum;
+        var PK = document.getElementById("PK").value,
+            name = document.getElementById("name").value,
+            continent = document.getElementById("continent").value,
+            city = document.getElementById("city").value,
+            state = document.getElementById("state").value,
+            country = document.getElementById("country").value,
+            latitude = document.getElementById("lat").value,
+            longitude = document.getElementById("long").value,
+            altitude = document.getElementById("altitude").value,
+            status = document.getElementById("status").checked,
+            date = document.getElementById("date").value.replace("T", " "),
+            description = document.getElementById("desc").value,
+            ID = document.getElementById("id").value;
 
-        for (var k = 0; k < bruh.length; k++) {
-            stationNames.push(document.getElementsByClassName("bruh")[k].textContent)
-        }
-        console.log(stationNames);
-
-        for (var j = 0; j < document.getElementsByClassName("select").length; j++) {
-            selectedstuff.push(document.getElementsByClassName("select")[j].value);
-        }
-        console.log(selectedstuff);
-
-        for (var l = 0; l < stationNames.length; l++) {
-            stationValues.push("false");
-        }
-
-        for (l = 0; l < selectedstuff.length; l++) {
-            thenum = stationNames.indexOf(selectedstuff[l]);
-            stationValues[thenum] = "true";
-        }
-        console.log(stationValues);
-
-        for(var i = 0; i < stationValues.length; i++){
-            if (stationValues[i] === true)
-                stationNumber++;
-        }
         console.log(date);
 
+        if (status) {
+            status = "Active";
+        } else {
+            status = "Inactive";
+        }
+        console.log(status);
+
         $.ajax({
-            url: '/abc',
+            url: '/defg2',
             method: 'get',
             data: {
+                PK: PK,
+                name: name,
+                continent: continent,
+                city: city,
+                state: state,
+                country: country,
+                latitude: latitude,
+                longitude: longitude,
+                altitude: altitude,
+                status: "Active",
                 date: date,
-                startTime: startTime,
-                endTime: endTime,
-                spikeSize: spikeSize,
-                stationNumber: stationNumber,
-                stationValues: stationValues,
+                description: description,
+                ID: ID
             },
             success: function () {
-                console.log("pwn'd");
-                window.location.href = '/dataHistory';
+                window.location.href = '/stationData';
             }
         })
     };

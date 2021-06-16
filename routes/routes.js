@@ -35,35 +35,6 @@ module.exports = function (app, passport) {
     // CS APP Home Section =================
     // =====================================
 
-    /*con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function(err, result){
-        var resultOne = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
-        console.log(resultOne);
-        con_CS.query("SELECT StationName FROM ESP2.stationdata;", function(err, result){
-            var resultTwo = JSON.stringify(result).replace("[", "").replace("]", "");
-            console.log(resultTwo);
-
-            for (var i = 0; i < resultOne.length; i++) {
-                resultTwo = resultTwo.replace(resultOne[i], "");
-                resultTwo = resultTwo.replace(/{"StationName":""},/g, "");
-            }
-            var newStations = resultTwo.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
-            console.log(newStations);
-
-            for (var j = 0; j < newStations.length; j++) {
-                con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
-                    var resultOne = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
-                    var query = "ALTER TABLE ESP2.anomalies ADD COLUMN " + newStations[newStations.length - 1] + " VARCHAR(45) NULL AFTER " + resultOne[resultOne.length - 1] + ";"
-                    const index = newStations.indexOf(newStations[newStations.length - 1]);
-                    if (index > -1) {
-                        newStations.splice(index, 1);
-                    }
-                    console.log(query);
-                    con_CS.query(query, function (err, result) {})
-                })
-            }
-        })
-    })*/
-
     app.get('/',function (req,res) {
         res.setHeader("Access-Control-Allow-Origin", "*"); // Allow cross domain header
         // res.render('homepage.ejs');
@@ -395,7 +366,6 @@ module.exports = function (app, passport) {
         });
     });
 
-
     // =====================================
     // REQUEST QUERY   =====================
     // =====================================
@@ -416,7 +386,49 @@ module.exports = function (app, passport) {
                 });
             }
         });
+    });
 
+    app.get('/stationData', isLoggedIn, function (req, res) {
+
+        let state2 = "SELECT firstName FROM UserProfile WHERE username = '" + req.user.username + "';";
+
+        con_CS.query(state2, function (err, results, fields) {
+            // console.log(results);
+            if (!results[0].firstName) {
+                console.log("Error2");
+            } else {
+                res.render('stationData.ejs', {
+                    user: req.user, // get the user out of session and pass to template
+                    firstName: results[0].firstName //get the firstName our of session ans pass to template
+                });
+            }
+        });
+    });
+
+    app.get('/addStation', isLoggedIn, function (req, res) {
+        let myStat = "SELECT userrole FROM UserLogin WHERE username = '" + req.user.username + "';";
+        let state2 = "SELECT firstName, lastName FROM UserProfile WHERE username = '" + req.user.username + "';"; //define last name
+
+        con_CS.query(myStat + state2, function (err, results) {
+            // console.log("Users: ");
+            // console.log(results);
+
+            if (err) throw err;
+
+            if (!results[0][0].userrole) {
+                console.log("Error2");
+            } else if (!results[1][0].firstName) {
+                console.log("Error1")
+            } else {
+                // console.log("Yes");
+                // console.log(req.user);
+                res.render('addStation.ejs', {
+                    user: req.user, // get the user out of session and pass to template
+                    firstName: results[1][0].firstName,
+                    lastName: results[1][0].lastName,
+                });
+            }
+        });
     });
 
     //Don't delete this it is for the timelog tables
@@ -428,8 +440,23 @@ module.exports = function (app, passport) {
         })
     })
 
+    app.get('/stationStuff', function(req, res){
+        let sqlStat = "SELECT * FROM ESP2.stationdata;"
+        con_CS.query(sqlStat, function(err, result){
+            //console.log(result);
+            res.json(result);
+        })
+    })
+
     app.get('/filterAllQuery', function(req, res){
         let sqlStat = "SELECT * FROM ESP2.anomalies;"
+        con_CS.query(sqlStat, function(err, result){
+            res.json(result);
+        })
+    })
+
+    app.get('/filterAllStation', function(req, res){
+        let sqlStat = "SELECT * FROM ESP2.stationdata;"
         con_CS.query(sqlStat, function(err, result){
             res.json(result);
         })
@@ -479,59 +506,41 @@ module.exports = function (app, passport) {
             res.send(george);
         });
     })
+    app.get('/getcolumnstwo', function (req, res) {
+        con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'stationdata' ORDER BY ordinal_position;", function (err, result) {
+            var george = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
+            console.log(george);
+            res.send(george);
+        });
+    })
 
-    app.get('/abc', function (req, res) {
+    app.get('/hijk', function (req, res) {
         var cool = req.query;
         console.log(cool.date);
-        con_CS.query("SELECT MAX(ID) FROM ESP2.anomalies", function (err, result) {
+        con_CS.query("SELECT MAX(PK) FROM ESP2.stationdata", function (err, result) {
             var ID = JSON.stringify(result)
             console.log(ID);
 
-            if (ID == '[{"MAX(ID)":null}]') {
+            if (ID === '[{"MAX(PK)":null}]') {
                 ID = '1'
             } else {
-                ID = parseInt(ID.replace('[{"MAX(ID)":', '')) + 1
+                ID = parseInt(ID.replace('[{"MAX(PK)":"', '')) + 1
             }
 
-            con_CS.query("INSERT INTO ESP2.anomalies (ID, Date, StartTime, EndTime, GapValue, StationNumber) VALUES ('" + ID + "', '" + cool.date + "', '" + cool.startTime + "', '" + cool.endTime + "', '" + cool.spikeSize + "', '" + cool.stationNumber + "');", function (err, result) {
+            con_CS.query("INSERT INTO ESP2.stationdata (PK, StationName, Continent, City, State, Country, Latitude, Longitude, Altitude, DateCreated, Status, CreatedBy, OName, StationDescription, Stationid) VALUES ('" + ID + "', '" + cool.name + "', '" + cool.continent + "', '" + cool.city + "', '" + cool.state + "', '" + cool.country +  "', '" + cool.latitude +  "', '" + cool.longitude +  "', '" + cool.altitude +  "', '" + cool.date +  "', 'Active', NULL, 'NULL', '" + cool.description +  "', '" + cool.ID + "');", function (err, result) {
                 if (err) throw err;
-                con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
-                    var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
-                        modified = false,
-                        querySet = "";
-
-                    console.log(george);
-                    for (i = 0; i < george.length; i++) {
-                        if (george[i] !== "") {
-                            if (modified === false) {
-                                querySet = "UPDATE ESP2.anomalies SET "
-                                modified = true
-                            }
-                            querySet += george[i] + " = '" + cool.stationValues[i] + "', ";
-                        }
-                    }
-
-                    if (modified === true) {
-                        querySet += "WHERE ID = '" + ID + "';";
-                        querySet = querySet.replace(', WHERE',' WHERE');
-                    }
-
-                    con_CS.query(querySet, function (err, result) {
-                        if (err) throw err;
-                        console.log(querySet);
-                        res.send("amongst");
-                    });
-                });
+                res.send("amongst");
             });
         });
     })
 
     app.get('/defg', function (req, res) {
         var neat = req.query;
-        var modified = false
+        var modified = false;
+        neat.status = "active";
         console.log(neat.date);
         var variables = [neat.date, neat.startTime, neat.endTime, neat.spikeSize, neat.stationNumber, neat.truePositive, neat.eventDate, neat.eventTime, neat.eventLocation, neat.eventLat, neat.eventLong, neat.url],
-            columns = ["Date", "StartTime", "EndTime", "GapValue", "StationNumber", "TruePositive", "EventDate", "EventTime", "EventLocation", "EventLatitude", "EventLongitude", "EventURL",],
+            columns = ["Date", "StartTime", "EndTime", "GapValue", "StationNumber", "TruePositive", "EventDate", "EventTime", "EventLocation", "EventLatitude", "EventLongitude", "EventURL"],
             i = 0,
             querySet = "";
 
@@ -588,6 +597,99 @@ module.exports = function (app, passport) {
                 if (err) throw err;
                 console.log(querySet);
                 res.send("amongst");
+            });
+        });
+    })
+
+    app.get('/defg2', function (req, res) {
+        var neat = req.query;
+        var modified = false
+        console.log(neat.date);
+        var variables = [neat.name, neat.continent, neat.city, neat.state, neat.country, neat.latitude, neat.longitude, neat.altitude, neat.date,neat.status, neat.description, neat.ID],
+            columns = ['StationName', 'Continent', 'City', 'State', 'Country', 'Latitude', 'Longitude', 'Altitude', 'DateCreated', 'Status', 'StationDescription', 'Stationid'],
+            i = 0,
+            querySet = "";
+
+        con_CS.query("SELECT StationName FROM ESP2.stationdata WHERE PK = " + neat.PK + ";", function (err, result) {
+            if (err) throw err;
+            result = JSON.stringify(Object.values(result)).replace('[{"StationName":"', '').replace('"}]', '');
+            con_CS.query('ALTER TABLE ESP2.anomalies RENAME COLUMN ' + result + ' TO ' + neat.name + ';', function (err) {
+                if (err) throw err;
+                console.log("ok");
+            });
+        });
+
+        while (i < variables.length) {
+            if (variables[i] !== "") {
+                if (modified === false) {
+                    querySet = "UPDATE ESP2.stationdata SET "
+                    modified = true
+                }
+                querySet += columns[i] + " = '" + variables[i] + "', ";
+            }
+
+            i++;
+        }
+
+        if (modified === true) {
+            querySet += "WHERE PK = '" + neat.PK + "';";
+            querySet = querySet.replace(', WHERE',' WHERE');
+        }
+
+        console.log(querySet);
+
+        if (modified === true) {
+            con_CS.query(querySet, function (err, result) {
+                if (err) throw err;
+                console.log("ok");
+            });
+        }
+
+        res.send("amongst");
+    });
+
+    app.get('/abc', function (req, res) {
+        var cool = req.query;
+        console.log(cool.date);
+        con_CS.query("SELECT MAX(ID) FROM ESP2.anomalies", function (err, result) {
+            var ID = JSON.stringify(result)
+            console.log(ID);
+
+            if (ID === '[{"MAX(ID)":null}]') {
+                ID = '1'
+            } else {
+                ID = parseInt(ID.replace('[{"MAX(ID)":', '')) + 1
+            }
+
+            con_CS.query("INSERT INTO ESP2.anomalies (ID, Date, StartTime, EndTime, GapValue, StationNumber) VALUES ('" + ID + "', '" + cool.date + "', '" + cool.startTime + "', '" + cool.endTime + "', '" + cool.spikeSize + "', '" + cool.stationNumber + "');", function (err, result) {
+                if (err) throw err;
+                con_CS.query("SELECT StationName FROM ESP2.stationdata;", function (err, result) {
+                    var george = JSON.stringify(result).replace(/{"StationName":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(","),
+                        modified = false,
+                        querySet = "";
+
+                    console.log(george);
+                    for (i = 0; i < george.length; i++) {
+                        if (george[i] !== "") {
+                            if (modified === false) {
+                                querySet = "UPDATE ESP2.anomalies SET "
+                                modified = true
+                            }
+                            querySet += george[i] + " = '" + cool.stationValues[i] + "', ";
+                        }
+                    }
+
+                    if (modified === true) {
+                        querySet += "WHERE ID = '" + ID + "';";
+                        querySet = querySet.replace(', WHERE',' WHERE');
+                    }
+
+                    con_CS.query(querySet, function (err, result) {
+                        if (err) throw err;
+                        console.log(querySet);
+                        res.send("amongst");
+                    });
+                });
             });
         });
     })
@@ -1703,6 +1805,38 @@ module.exports = function (app, passport) {
         });
     });
 
+    app.get('/editStations', isLoggedIn, function (req, res) {
+        let myStat = "SELECT userrole FROM UserLogin WHERE username = '" + req.user.username + "';";
+        let state2 = "SELECT firstName, lastName FROM UserProfile WHERE username = '" + req.user.username + "';"; //define last name
+
+        con_CS.query(myStat + state2, function (err, results) {
+            // console.log("Users: ");
+            // console.log(results);
+
+            if (err) throw err;
+
+            if (!results[0][0].userrole) {
+                console.log("Error2");
+            } else if (!results[1][0].firstName) {
+                console.log("Error1")
+            } else {
+                // console.log("Yes");
+                // console.log(req.user);
+                con_CS.query("SELECT StationName, Continent, City, State, Country, Latitude, Longitude, Altitude, DateCreated, Status, StationDescription, Stationid FROM ESP2.stationdata WHERE PK = '" + req.query.ID + "';", function (err, result) {
+                    var selectedRow = Object.values(result[0]);
+                    console.log(selectedRow[8]);
+                    res.render('editStations.ejs', {
+                        user: req.user, // get the user out of session and pass to template
+                        firstName: results[1][0].firstName,
+                        lastName: results[1][0].lastName,
+                        ID: req.query.ID,
+                        selectedRow: selectedRow,
+                    });
+                })
+            }
+        });
+    });
+
     // =====================================
     // Others  =============================
     // =====================================
@@ -2010,7 +2144,7 @@ module.exports = function (app, passport) {
         });
     }
 
-    setTimeout(myFunction, 0);
+    myFunction();
     function myFunction() {
         con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' ORDER BY ordinal_position;", function (err, result) {
             var resultTwo = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
@@ -2023,16 +2157,13 @@ module.exports = function (app, passport) {
                     resultThree = resultThree.replace(/{"StationName":""},/g, "");
                 }
                 var newStations = resultThree.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
-                console.log(newStations);
 
                 for (i = 0; i < newStations.length; i++) {
                     resultOne = resultOne.replace(newStations[i], "");
                     resultOne = resultOne.replace(/{"StationName":""},/g, "");
                     resultOne = resultOne.replace(/,{"StationName":""}/g, "");
-                    console.log(resultOne);
                 }
                 resultOne = resultOne.replace("{\"StationName\":\"", "").replace(/"}/g, "").split(",{\"StationName\":\"");
-                console.log(resultOne);
 
                 for (var j = 0; j < newStations.length; j++) {
                     con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' AND COLUMN_NAME LIKE 'ESP%' ORDER BY ordinal_position;", function (err, result) {
@@ -2042,9 +2173,23 @@ module.exports = function (app, passport) {
                             newStations.splice(index, 1);
                         }
                         console.log(query);
-                        con_CS.query(query, function (err, result) {
-                        })
+                        con_CS.query(query, function (err, result) {})
                     })
+                }
+
+                //remove nonexistant stations
+                var columns = ['ID', 'Date', 'StartTime', 'EndTime', 'GapValue', 'StationNumber', 'TruePositive', 'EventDate', 'EventTime', 'EventLocation', 'EventLatitude', 'EventLongitude', 'EventURL',].concat(JSON.stringify(result).replace("[{\"StationName\":\"", "").replace("\"}]", "").split("\"},{\"StationName\":\""));
+
+                for (j = 0; j < columns.length; j++) {
+                    const index = resultTwo.indexOf(columns[j]);
+                    if (index > -1) {
+                        resultTwo.splice(index, 1);
+                    }
+                }
+                console.log("Column(s) " + JSON.stringify(resultTwo) + " have been removed")
+
+                for (j = 0; j < resultTwo.length; j++) {
+                    con_CS.query("ALTER TABLE ESP2.anomalies DROP COLUMN " + resultTwo[j] + ";")
                 }
             })
         })
