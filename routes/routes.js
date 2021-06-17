@@ -530,6 +530,7 @@ module.exports = function (app, passport) {
             con_CS.query("INSERT INTO ESP2.stationdata (PK, StationName, Continent, City, State, Country, Latitude, Longitude, Altitude, DateCreated, Status, CreatedBy, OName, StationDescription, Stationid) VALUES ('" + ID + "', '" + cool.name + "', '" + cool.continent + "', '" + cool.city + "', '" + cool.state + "', '" + cool.country +  "', '" + cool.latitude +  "', '" + cool.longitude +  "', '" + cool.altitude +  "', '" + cool.date +  "', 'Active', NULL, 'NULL', '" + cool.description +  "', '" + cool.ID + "');", function (err, result) {
                 if (err) throw err;
                 res.send("amongst");
+                myFunction();
             });
         });
     })
