@@ -305,6 +305,16 @@
     document.getElementById("desc").value = '<%= selectedRow[10] %>';
     document.getElementById("id").value = '<%= selectedRow[11] %>';
 
+    $("input#name").on({
+        keydown: function(e) {
+            if (e.which === 32)
+                return false;
+        },
+        change: function() {
+            this.value = this.value.replace(/\s/g, "");
+        }
+    });
+
     $(document).ready(function() {
 
         $(function () {

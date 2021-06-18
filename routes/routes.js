@@ -530,6 +530,7 @@ module.exports = function (app, passport) {
             con_CS.query("INSERT INTO ESP2.stationdata (PK, StationName, Continent, City, State, Country, Latitude, Longitude, Altitude, DateCreated, Status, CreatedBy, OName, StationDescription, Stationid) VALUES ('" + ID + "', '" + cool.name + "', '" + cool.continent + "', '" + cool.city + "', '" + cool.state + "', '" + cool.country +  "', '" + cool.latitude +  "', '" + cool.longitude +  "', '" + cool.altitude +  "', '" + cool.date +  "', 'Active', NULL, 'NULL', '" + cool.description +  "', '" + cool.ID + "');", function (err, result) {
                 if (err) throw err;
                 res.send("amongst");
+                myFunction();
             });
         });
     })
@@ -2144,7 +2145,7 @@ module.exports = function (app, passport) {
         });
     }
 
-    myFunction();
+    myFunctionTwo();
     function myFunction() {
         con_CS.query("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = N'anomalies' ORDER BY ordinal_position;", function (err, result) {
             var resultTwo = JSON.stringify(result).replace(/{"COLUMN_NAME":"/g, "").replace(/"}/g, "").replace("[", "").replace("]", "").split(",");
@@ -2193,6 +2194,10 @@ module.exports = function (app, passport) {
                 }
             })
         })
-        setTimeout(myFunction, 600000);
+    }
+
+    function myFunctionTwo() {
+        myFunction();
+        setTimeout(myFunctionTwo, 600000);
     }
 };

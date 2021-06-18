@@ -288,7 +288,15 @@
     // let addButton = document.getElementById('add');
     // let removeButton = document.getElementById('remove');
 
-
+    $("input#name").on({
+        keydown: function(e) {
+            if (e.which === 32)
+                return false;
+        },
+        change: function() {
+            this.value = this.value.replace(/\s/g, "");
+        }
+    });
 
     $(document).ready(function() {
 
